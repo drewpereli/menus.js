@@ -34,6 +34,7 @@ StaticMenu.prototype = new Menu();
 StaticMenu.prototype.initialize = function(args)
 {
 	var items = args.items;
+	var id = args.id;
 	var descriptions = false;
 	var title = false;
 	if (typeof args.descriptions !== "undefined")
@@ -44,7 +45,7 @@ StaticMenu.prototype.initialize = function(args)
 	if (typeof args.title !== "undefined")
 		title = args.title;
 	//Set up the html
-	var menu = $("<div class=\"menu menu-hide\"></div>");
+	var menu = $("<div id=\"" + id + "\" class=\"menu menu-hide\"></div>");
 	$(menu).appendTo("#menu-container");
 	//Create a menu title, if there is one
 	if (title)
@@ -61,8 +62,15 @@ StaticMenu.prototype.initialize = function(args)
 	}
 	//Add items to the item container
 	$(items).each(function(index, itemText){
-
+		$(`<div class="menu-item">${itemText}</div>`).appendTo(menu);
 	});
+	//Add descriptions, if they exist
+	if (descriptions)
+	{
+		$(descriptions).each(function(index, descriptionText){
+			$(`<div class="menu-item-description">${descriptionText}</div>`).appendTo(descriptionContainer);
+		});
+	}
 }
 
 
@@ -108,9 +116,10 @@ $(document).ready(function(){
 
 var global_menus = 
 {
-	openMenu: false
+	openMenu: false,
+	menus: [],
+	toggleKeys: [], //The key codes of the buttons that open the menu
 };
-global_menus.menus = [];
 
 global_menus.initialize = function()
 {
@@ -162,6 +171,13 @@ global_menus.initialize = function()
 			{
 				global_menus.openMenu.onEnter();
 			}
+		}
+		//If a key pressed toggles a menu
+		if (global_menus.toggleKeys.indexOf(e.which) !== -1)
+		{
+			var index = global_menus.toggleKeys.indexOf(e.which);
+			var menuToToggle = global_menus.menus[index];
+			global_menus.toggle(menu.html.menu.id);
 		}
 	});
 }
