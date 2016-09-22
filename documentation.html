@@ -7,11 +7,13 @@
 	<p>
 		Menu.js is a library for easily creating both static and dynamic menu interfaces.
 	</p>
-	<h3>Requirements</h3>
+	<h2>Requirements</h2>
 	<p>
 		The only other library that Menu.js requires is jQuery.
 	</p>
-	<h3>Static Menus</h3>
+	<h2>Static Menus</h2>
+	<p>Menu.js includes both static and dynamic menus. We'll explore static menus first.</p>
+	<h3>Creating a Static Menu</h3>
 	<p>
 		Static menus are created by making html elements of this form:
 	</p>
@@ -28,11 +30,17 @@
 	<p>
 		Menus must include the class "menu". Menu items must include the class "menu-item".
 	</p>
+	<h3>Accessing a Static Menu</h3>
 	<p>
 		When the your document loads, abstract javascript models of your menus will be created. You can access them with the
 		<span class="javascript">global_menus</span> variable. 
-		To access your menu objects, use <span class="javascript">global_menus.getMenu("the_id_of_your_menu")</span>. 
+		To access your menu objects, use <span class="javascript">global_menus.getMenu(MENU_ID)</span>. 
 		This function returns the menu object corresponding to the id you feed it!
+	</p>
+	<h3>Opening and Closing a Static Menu</h3>
+	<p>
+		To open or close your menu, simply call the function <span class="javascript">global_menus.toggle(MENU_ID)"</span>.
+		You can only have one menu open at a time. If there is currently a different menu open, "toggle" will automatically close it before opening your menu. 
 	</p>
 </body>
 </html>

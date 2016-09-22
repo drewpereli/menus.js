@@ -5,6 +5,7 @@ function Menu()
 	this.childMenu = false;
 	this.open = false; //true only if it's the current menu being looked at
 	this.descriptions = false; //True only if at least one menu item comes with a description
+	this.onEnter = false;
 	this.html = 
 	{
 		menu: false,
