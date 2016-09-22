@@ -1,0 +1,38 @@
+
+<html>
+<head>
+</head>
+<body>
+	<h1>Menu.js</h1>
+	<p>
+		Menu.js is a library for easily creating both static and dynamic menu interfaces.
+	</p>
+	<h3>Requirements</h3>
+	<p>
+		The only other library that Menu.js requires is jQuery.
+	</p>
+	<h3>Static Menus</h3>
+	<p>
+		Static menus are created by making html elements of this form:
+	</p>
+		<pre>
+			&lt;div class="menu" id="menu_name"&gt;<br />
+			    &lt;div class="menu-item"&gt;Menu Item 1 Text&lt;/div&gt;<br />
+			    &lt;div class="menu-item"&gt;Menu Item 2 Text&lt;/div&gt;<br />
+			    &lt;div class="menu-item"&gt;Menu Item 3 Text&lt;/div&gt;<br />
+			&lt;/div&gt;
+		</pre>
+	<p>
+		Menus must have unique ID attributes!
+	</p>
+	<p>
+		Menus must include the class "menu". Menu items must include the class "menu-item".
+	</p>
+	<p>
+		When the your document loads, abstract javascript models of your menus will be created. You can access them with the
+		<span class="javascript">global_menus</span> variable. 
+		To access your menu objects, use <span class="javascript">global_menus.getMenu("the_id_of_your_menu")</span>. 
+		This function returns the menu object corresponding to the id you feed it!
+	</p>
+</body>
+</html>

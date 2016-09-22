@@ -14,6 +14,24 @@ function Menu()
 }
 
 
+function DynamicMenu(itemArray)
+{
+	this.itemArray = itemArray;
+
+	this.initialize();
+}
+
+DynamicMenu.prototype = new Menu;
+
+DynamicMenu.prototype.initialize = function()
+{
+	console.log("it's working");
+}
+
+var array = ["a"];
+var m = new DynamicMenu(array);
+
+
 $(document).ready(function(){
 	var importedNames = ["Menu"];
 	$(importedNames).each(function(index, name){
@@ -39,6 +57,7 @@ var global_menus =
 	openMenu: false
 };
 global_menus.menus = [];
+
 global_menus.initialize = function()
 {
 	var menuElements = $(".menu"); //Get all the menu dom elements
@@ -86,6 +105,9 @@ global_menus.initialize = function()
 		}
 		*/
 	});
+	//Create the "menu container" DOM element and add all the menus to it
+	$("<div id=\"menu-container\"></div>").appendTo(document.body);
+	$(menuElements).appendTo("#menu-container");
 }
 
 
@@ -180,6 +202,11 @@ global_menus.getMenuFromId = function(menuId)
 	return returnMenu;
 }
 
+
+global_menus.getMenu = function(menuId)
+{
+	return global_menus.getMenuFromId(menuId);
+}
 
 
 
