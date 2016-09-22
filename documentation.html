@@ -34,8 +34,15 @@
 		The second way to create a static menu is with javascript, using the StaticMenu() constructor.
 	</p>
 	<p>
-		The StaticMenu() constructor takes an associative array as it's one argument. 
+		The StaticMenu() constructor takes an associative array as its one argument. The array has one property ("items") and many optional properties. Here is the structure of the array.
 	</p>
+	<pre>
+		var argument = {
+			items: ["Item 1 text", "Item 2 text", . . . "Item n text"], //REQUIRED
+			descriptions: ["Description of Item 1", "Description of Item 2", . . . "Description of Item n"], //OPTIONAL
+			title: "Menu Title", //OPTIONAL
+		}
+	</pre>
 	<h3>Accessing a Menu</h3>
 	<p>
 		When the your document loads, abstract javascript models of your menus will be created. You can access them with the

@@ -24,7 +24,45 @@ Menu.prototype.getSelectedText = function(){return this.html.items[this.selected
 
 function StaticMenu(args)
 {
-	
+	this.initialize(args);
+}
+
+
+StaticMenu.prototype = new Menu();
+
+
+StaticMenu.prototype.initialize = function(args)
+{
+	var items = args.items;
+	var descriptions = false;
+	var title = false;
+	if (typeof args.descriptions !== "undefined")
+	{
+		this.descriptions = true;
+		descriptions = args.descriptions;
+	}
+	if (typeof args.title !== "undefined")
+		title = args.title;
+	//Set up the html
+	var menu = $("<div class=\"menu menu-hide\"></div>");
+	$(menu).appendTo("#menu-container");
+	//Create a menu title, if there is one
+	if (title)
+		$("<div class=\"menu-title\">" + title + "</div>").appendTo(menu);
+	//Create a menu item container
+	var itemContainer = $("<div class=\"menu-item-container\"></div>");
+	$(itemContainer).appendTo(menu);
+	//Create a description container, if there are descriptions
+	var descriptionContainer;
+	if (descriptions)
+	{
+		descriptionContainer = $("<div class=\"menu-item-description-container\"></div>");
+		$(descriptionContainer).appendTo(menu);
+	}
+	//Add items to the item container
+	$(items).each(function(index, itemText){
+
+	});
 }
 
 
