@@ -15,7 +15,7 @@
 	<p>Menu.js includes both static and dynamic menus. We'll explore static menus first.</p>
 	<h3>Creating a Static Menu</h3>
 	<p>
-		Static menus are created by making html elements of this form:
+		There are two ways to create static menus. The first is with html.
 	</p>
 		<pre>
 			&lt;div class="menu" id="menu_name"&gt;<br />
@@ -30,17 +30,38 @@
 	<p>
 		Menus must include the class "menu". Menu items must include the class "menu-item".
 	</p>
-	<h3>Accessing a Static Menu</h3>
+	<p>
+		The second way to create a static menu is with javascript, using the StaticMenu() constructor.
+	</p>
+	<p>
+		The StaticMenu() constructor takes an associative array as it's one argument. 
+	</p>
+	<h3>Accessing a Menu</h3>
 	<p>
 		When the your document loads, abstract javascript models of your menus will be created. You can access them with the
 		<span class="javascript">global_menus</span> variable. 
 		To access your menu objects, use <span class="javascript">global_menus.getMenu(MENU_ID)</span>. 
 		This function returns the menu object corresponding to the id you feed it!
 	</p>
-	<h3>Opening and Closing a Static Menu</h3>
+	<h3>Opening and Closing a Menu</h3>
 	<p>
 		To open or close your menu, simply call the function <span class="javascript">global_menus.toggle(MENU_ID)"</span>.
 		You can only have one menu open at a time. If there is currently a different menu open, "toggle" will automatically close it before opening your menu. 
 	</p>
+	<h3>Selecting Items in a Menu</h3>
+	<p>
+		By default, the first item in a menu is selected. To select a different item, use the up and down arrow keys.
+	</p>
+	<p>
+		To have the menu do something when you hit enter, you can set the <span class="javascript">onEnter</span> property of the menu object to the function you would like to execute. You can access the index of the selected item with the 
+		<span class="javascript">this.getSelectedIndex()</span> method. You can get the text of the selected meny item with the 
+		<span class="javascript">this.getSelectedText()</span> method. 
+	</p>
 </body>
 </html>
+
+
+
+
+
+

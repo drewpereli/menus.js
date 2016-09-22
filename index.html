@@ -31,4 +31,12 @@
 			global_menus.toggle("menu2");
 		}
 	});
+	$(document).ready(function(){
+		var menu1 = global_menus.getMenuFromId("menu1");
+		menu1.onEnter = function()
+		{
+			console.log(this.getSelectedIndex());
+			console.log(this.getSelectedText());
+		}
+	});
 </script>

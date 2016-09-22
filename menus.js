@@ -5,7 +5,8 @@ function Menu()
 	this.childMenu = false;
 	this.open = false; //true only if it's the current menu being looked at
 	this.descriptions = false; //True only if at least one menu item comes with a description
-	this.onEnter = false;
+	this.onEnter = function(){};
+	this.selectedIndex = 0;
 	this.html = 
 	{
 		menu: false,
@@ -13,6 +14,19 @@ function Menu()
 		descriptions: [],
 	}
 }
+
+
+Menu.prototype.getSelectedIndex = function(){return this.selectedIndex;}
+
+
+Menu.prototype.getSelectedText = function(){return this.html.items[this.selectedIndex].innerHTML;}
+
+
+function StaticMenu(args)
+{
+	
+}
+
 
 
 function DynamicMenu(itemArray)
@@ -29,8 +43,9 @@ DynamicMenu.prototype.initialize = function()
 	console.log("it's working");
 }
 
-var array = ["a"];
-var m = new DynamicMenu(array);
+
+//var array = ["a"];
+//var m = new DynamicMenu(array);
 
 
 $(document).ready(function(){
@@ -96,19 +111,21 @@ global_menus.initialize = function()
 			$(descCont).addClass("menu-item-description-container").appendTo(menuElement); //Add the description container class and append it to the meny element
 			$(menu.html.descriptions).appendTo(descCont); //Append the menu items to the description container
 		}
-		//Do the title stuff, if there is a title
-		/*
-		var title = menuElement.children(".menu-title");
-		if (title.length >= 0)
-		{
-			title = title[0];
-
-		}
-		*/
 	});
 	//Create the "menu container" DOM element and add all the menus to it
 	$("<div id=\"menu-container\"></div>").appendTo(document.body);
 	$(menuElements).appendTo("#menu-container");
+	//Add the enter key event listener
+	$(document).keydown(function(e){
+		if (e.which === 13) //If it's the enter key
+		{
+			//Active the "on enter" function for the open menu, if there is one. 
+			if (global_menus.openMenu)
+			{
+				global_menus.openMenu.onEnter();
+			}
+		}
+	});
 }
 
 
@@ -157,6 +174,7 @@ global_menus.selectUp = function()
 	{
 		$(this.openMenu.html.items[selectedIndex + 1]).removeClass("menu-item-selected");
 		$(this.openMenu.html.items[selectedIndex]).addClass("menu-item-selected");
+		this.openMenu.selectedIndex = selectedIndex;
 		if (this.openMenu.descriptions)
 		{
 			$(this.openMenu.html.descriptions[selectedIndex + 1]).addClass("menu-item-description-hidden");
@@ -181,6 +199,7 @@ global_menus.selectDown = function()
 	{
 		$(this.openMenu.html.items[selectedIndex - 1]).removeClass("menu-item-selected");
 		$(this.openMenu.html.items[selectedIndex]).addClass("menu-item-selected");
+		this.openMenu.selectedIndex = selectedIndex;
 		if (this.openMenu.descriptions)
 		{
 			$(this.openMenu.html.descriptions[selectedIndex - 1]).addClass("menu-item-description-hidden");
