@@ -6,13 +6,13 @@
 	<link type="text/css" rel="stylesheet" href="style.css" />
 </head>
 <body>
-	<div id="menu1" class="menu">
+	<div id="menu1" class="menu" open-with="49">
 		<div class="menu-title">Menu 1</div>
 		<div class="menu-item">Item 1<div class="menu-item-description">Description for item 1</div></div>
 		<div class="menu-item">Item 2<div class="menu-item-description">Description for item 2</div></div>
 		<div class="menu-item">Item 3<div class="menu-item-description">Description for item 3</div></div>
 	</div>
-	<div id="menu2" class="menu">
+	<div id="menu2" class="menu" open-with="50">
 		<div class="menu-item">Item 1</div>
 		<div class="menu-item">Item 2</div>
 		<div class="menu-item">Item 3</div>
@@ -21,6 +21,7 @@
 </html>
 
 <script>
+	/*
 	$(document).keydown(function(e){
 		if (e.which === 49)
 		{
@@ -31,6 +32,7 @@
 			global_menus.toggle("menu2");
 		}
 	});
+	*/
 	$(document).ready(function(){
 		var menu1 = global_menus.getMenuFromId("menu1");
 		menu1.onEnter = function()

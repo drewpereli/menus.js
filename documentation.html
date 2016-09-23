@@ -18,7 +18,7 @@
 		There are two ways to create static menus. The first is with html.
 	</p>
 		<pre>
-			&lt;div class="menu" id="menu_name"&gt;<br />
+			&lt;div class="menu" id="menu_name" open-with="keycode_to_open_with"&gt;<br />
 			    &lt;div class="menu-item"&gt;Menu Item 1 Text&lt;/div&gt;<br />
 			    &lt;div class="menu-item"&gt;Menu Item 2 Text&lt;/div&gt;<br />
 			    &lt;div class="menu-item"&gt;Menu Item 3 Text&lt;/div&gt;<br />
@@ -31,6 +31,9 @@
 		Menus must include the class "menu". Menu items must include the class "menu-item".
 	</p>
 	<p>
+		The "open-with" attribute is optional. You can set it to the <a href="http://keycode.info/">keycode</a> of the key you would like to be able to open the menu with.
+	</p>
+	<p>
 		The second way to create a static menu is with javascript, using the StaticMenu() constructor.
 	</p>
 	<p>
@@ -38,7 +41,7 @@
 	</p>
 	<pre>
 		var argument = {
-			id: "unique_html_id", //REQUIRED. 
+			id: "unique_html_id", //REQUIRED
 			items: ["Item 1 text", "Item 2 text", . . . "Item n text"], //REQUIRED. 
 			descriptions: ["Description of Item 1", "Description of Item 2", . . . "Description of Item n"], //OPTIONAL
 			title: "Menu Title", //OPTIONAL

@@ -37,6 +37,7 @@ StaticMenu.prototype.initialize = function(args)
 	var id = args.id;
 	var descriptions = false;
 	var title = false;
+	var openWith = false;
 	if (typeof args.descriptions !== "undefined")
 	{
 		this.descriptions = true;
@@ -118,7 +119,7 @@ var global_menus =
 {
 	openMenu: false,
 	menus: [],
-	toggleKeys: [], //The key codes of the buttons that open the menu
+	toggleKeyCodes: [], //The key codes of the buttons that open the menu
 };
 
 global_menus.initialize = function()
@@ -147,7 +148,6 @@ global_menus.initialize = function()
 			}
 		});
 		$(menu.html.items[0]).addClass("menu-item-selected"); //Have the first menu item selected by default
-		global_menus.menus.push(menu); //Add the menu to the global_menus array of menus
 		//Create the item container and description container
 		var itemCont = document.createElement('div'); //Create the item container
 		$(itemCont).addClass("menu-item-container").appendTo(menuElement); //Add the item container class and append it to the meny element
@@ -157,6 +157,18 @@ global_menus.initialize = function()
 			var descCont = document.createElement('div'); //Create the description container
 			$(descCont).addClass("menu-item-description-container").appendTo(menuElement); //Add the description container class and append it to the meny element
 			$(menu.html.descriptions).appendTo(descCont); //Append the menu items to the description container
+		}
+		global_menus.menus.push(menu); //Add the menu to the global_menus array of menus
+		//If the "open-with" attribute is set on the html element, add it to the "toggleKeyCodes" array.
+		if ($(menuElement).is("[open-with]"))//If the menu has the "open-with" attribute set
+		{
+			var openWith = $(menuElement).attr("open-with");//Get the keycode
+			openWith = Number(openWith); //Conver it to a number
+			global_menus.toggleKeyCodes.push(openWith);
+		}
+		else
+		{
+			global_menus.toggleKeyCodes.push(false);
 		}
 	});
 	//Create the "menu container" DOM element and add all the menus to it
@@ -173,11 +185,11 @@ global_menus.initialize = function()
 			}
 		}
 		//If a key pressed toggles a menu
-		if (global_menus.toggleKeys.indexOf(e.which) !== -1)
+		if (global_menus.toggleKeyCodes.indexOf(e.which) !== -1)
 		{
-			var index = global_menus.toggleKeys.indexOf(e.which);
+			var index = global_menus.toggleKeyCodes.indexOf(e.which);
 			var menuToToggle = global_menus.menus[index];
-			global_menus.toggle(menu.html.menu.id);
+			global_menus.toggle(menuToToggle.html.menu.id);
 		}
 	});
 }
