@@ -86,7 +86,7 @@ StaticMenu.prototype.initialize = function(args)
 		var item = $(`<div class="menu-item">${itemText}</div>`)[0];
 		if (index === 0)
 			$(item).addClass("menu-item-selected");
-		$(item).appendTo(menu);
+		$(item).appendTo(itemContainer);
 		menuObject.html.items.push(item);
 	});
 	//Add descriptions, if they exist
