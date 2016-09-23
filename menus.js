@@ -33,6 +33,7 @@ StaticMenu.prototype = new Menu();
 
 StaticMenu.prototype.initialize = function(args)
 {
+	var menuObject = this;
 	//Do some error checking
 	if (typeof args.items === "undefined")
 	{
@@ -64,35 +65,37 @@ StaticMenu.prototype.initialize = function(args)
 		}
 	}
 	//Set up the html
-	var menu = $("<div id=\"" + id + "\" class=\"menu menu-hide\"></div>");
+	var menu = $("<div id=\"" + id + "\" class=\"menu menu-hide\"></div>")[0];
 	this.html.menu = menu;
 	$(menu).appendTo("#menu-container");
 	//Create a menu title, if there is one
 	if (title)
 		$("<div class=\"menu-title\">" + title + "</div>").appendTo(menu);
 	//Create a menu item container
-	var itemContainer = $("<div class=\"menu-item-container\"></div>");
+	var itemContainer = $("<div class=\"menu-item-container\"></div>")[0];
 	$(itemContainer).appendTo(menu);
 	//Create a description container, if there are descriptions
 	var descriptionContainer;
 	if (descriptions)
 	{
-		descriptionContainer = $("<div class=\"menu-item-description-container\"></div>");
+		descriptionContainer = $("<div class=\"menu-item-description-container\"></div>")[0];
 		$(descriptionContainer).appendTo(menu);
 	}
 	//Add items to the item container
 	$(items).each(function(index, itemText){
-		var item = $(`<div class="menu-item">${itemText}</div>`);
+		var item = $(`<div class="menu-item">${itemText}</div>`)[0];
+		if (index === 0)
+			$(item).addClass("menu-item-selected");
 		$(item).appendTo(menu);
-		this.html.items.push(item);
+		menuObject.html.items.push(item);
 	});
 	//Add descriptions, if they exist
 	if (descriptions)
 	{
 		$(descriptions).each(function(index, descriptionText){
-			var desc = $(`<div class="menu-item-description">${descriptionText}</div>`);
+			var desc = $(`<div class="menu-item-description">${descriptionText}</div>`)[0];
 			$(desc).appendTo(descriptionContainer);
-			this.html.descriptions.push(desc);
+			menuObject.html.descriptions.push(desc);
 		});
 	}
 	//Add the menu to the global menu array
@@ -101,6 +104,9 @@ StaticMenu.prototype.initialize = function(args)
 	if (openWith !== false)
 		global_menus.toggleKeyCodes.push(openWith);
 }
+
+
+
 
 
 

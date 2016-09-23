@@ -13,6 +13,7 @@
 		<div class="menu-item">Item 3<div class="menu-item-description">Description for item 3</div></div>
 	</div>
 	<div id="menu2" class="menu" open-with="50">
+		<div class="menu-title">Menu 2</div>
 		<div class="menu-item">Item 1</div>
 		<div class="menu-item">Item 2</div>
 		<div class="menu-item">Item 3</div>
@@ -23,11 +24,11 @@
 <script>
 	/*
 	$(document).keydown(function(e){
-		if (e.which === 49)
+		if (e.which === 49)//The '1' key
 		{
 			global_menus.toggle("menu1");
 		}
-		else if (e.which === 50)
+		else if (e.which === 50)//the '2' key
 		{
 			global_menus.toggle("menu2");
 		}
@@ -40,5 +41,19 @@
 			console.log(this.getSelectedIndex());
 			console.log(this.getSelectedText());
 		}
+		//Static menu test
+		var args = {
+			id: "my_menu",
+			items: [
+				"Item 1",
+				"Item 2",
+				"Item 3",
+				"Item 4",
+			],
+			title: "My Awesome Menu",
+			openWith: "51",
+		}
+		new StaticMenu(args);
+		//
 	});
 </script>
