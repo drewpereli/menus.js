@@ -33,6 +33,17 @@ StaticMenu.prototype = new Menu();
 
 StaticMenu.prototype.initialize = function(args)
 {
+	//Do some error checking
+	if (typeof args.items === "undefined")
+	{
+		console.log("Your argument array must have an 'items' property.");
+		return false;
+	}
+	if (typeof args.id === "undefined")
+	{
+		console.log("You argument array must have an 'id' property.");
+		return false;
+	}
 	var items = args.items;
 	var id = args.id;
 	var descriptions = false;
@@ -45,8 +56,16 @@ StaticMenu.prototype.initialize = function(args)
 	}
 	if (typeof args.title !== "undefined")
 		title = args.title;
+	if (typeof args.openWith !== "undefined")
+	{
+		if (!isNaN(Number(args.openWith)))
+		{
+			openWith = Number(args.openWith);
+		}
+	}
 	//Set up the html
 	var menu = $("<div id=\"" + id + "\" class=\"menu menu-hide\"></div>");
+	this.html.menu = menu;
 	$(menu).appendTo("#menu-container");
 	//Create a menu title, if there is one
 	if (title)
@@ -63,15 +82,24 @@ StaticMenu.prototype.initialize = function(args)
 	}
 	//Add items to the item container
 	$(items).each(function(index, itemText){
-		$(`<div class="menu-item">${itemText}</div>`).appendTo(menu);
+		var item = $(`<div class="menu-item">${itemText}</div>`);
+		$(item).appendTo(menu);
+		this.html.items.push(item);
 	});
 	//Add descriptions, if they exist
 	if (descriptions)
 	{
 		$(descriptions).each(function(index, descriptionText){
-			$(`<div class="menu-item-description">${descriptionText}</div>`).appendTo(descriptionContainer);
+			var desc = $(`<div class="menu-item-description">${descriptionText}</div>`);
+			$(desc).appendTo(descriptionContainer);
+			this.html.descriptions.push(desc);
 		});
 	}
+	//Add the menu to the global menu array
+	global_menus.menus.push(this);
+	//Add the toggle on this key thing
+	if (openWith !== false)
+		global_menus.toggleKeyCodes.push(openWith);
 }
 
 
