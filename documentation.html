@@ -51,9 +51,18 @@
 	<p>
 		The order of the key/value pairs does not matter.
 	</p>
+	<h2>Dynamic Menu</h2>
+	<p>
+		Dynamic menus work almost the same as static menus. The difference is, you can link a dynamic menu to an array of objects, and the menu text will be filled and updated based on those objects.
+	</p>
+	<h3>Creating a Dynamic Menu</h3>
+	<p>
+		Dynamic menus can only be created using javascript. The process is almost the same as creating a static menu with javascript. But there are some extra paramaters required. 
+	</p>
+	<h2>Using a Menu</h2>
 	<h3>Accessing a Menu</h3>
 	<p>
-		When the your document loads, abstract javascript models of your menus will be created. You can access them with the
+		When your document loads, abstract javascript models of your menus will be created. You can access them with the
 		<span class="javascript">global_menus</span> variable. 
 		To access your menu objects, use <span class="javascript">global_menus.getMenu(MENU_ID)</span>. 
 		This function returns the menu object corresponding to the id you feed it!

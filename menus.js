@@ -22,6 +22,55 @@ Menu.prototype.getSelectedIndex = function(){return this.selectedIndex;}
 Menu.prototype.getSelectedText = function(){return this.html.items[this.selectedIndex].innerHTML;}
 
 
+Menu.prototype.createMenuElement = function(id)
+{
+	var menu = $("<div id=\"" + id + "\" class=\"menu menu-hide\"></div>")[0];
+	this.html.menu = menu;
+	//Append to the menu contain
+	$(menu).appendTo("#menu-container");
+}
+
+
+Menu.prototype.createTitleElement = function(title)
+{
+	$("<div class=\"menu-title\">" + title + "</div>").appendTo(this.html.menu);
+}
+
+
+Menu.prototype.createItemContainerElement = function()
+{
+	$("<div class=\"menu-item-container\"></div>").appendTo(this.html.menu);
+}
+
+
+Menu.prototype.createDescriptionContainerElement = function()
+{
+	$("<div class=\"menu-item-description-container\"></div>").appendTo(this.html.menu);
+}
+
+
+Menu.prototype.addItem = function(itemText)
+{
+	var item = $(`<div class="menu-item">${itemText}</div>`)[0];
+	if (this.html.items.length === 0)
+		$(item).addClass("menu-item-selected");
+	$(item).appendTo($(this.html.menu).find(".menu-item-container"));
+	this.html.items.push(item);
+}
+
+
+Menu.prototype.addDescription = function(descriptionText)
+{
+	var desc = $(`<div class="menu-item-description">${descriptionText}</div>`)[0];
+	if (this.html.descriptions.length !== this.selectedIndex) //If this isn't the description of the selected menu item
+		$(desc).addClass("menu-item-description-hidden");
+	$(desc).appendTo($(this.html.menu).find(".menu-item-description-container"));
+	this.html.descriptions.push(desc);
+}
+
+
+
+
 function StaticMenu(args)
 {
 	this.initialize(args);
@@ -65,37 +114,24 @@ StaticMenu.prototype.initialize = function(args)
 		}
 	}
 	//Set up the html
-	var menu = $("<div id=\"" + id + "\" class=\"menu menu-hide\"></div>")[0];
-	this.html.menu = menu;
-	//Create the menu container, if there isn't one already.
-	$(menu).appendTo("#menu-container");
+	this.createMenuElement(id);
 	//Create a menu title, if there is one
 	if (title)
-		$("<div class=\"menu-title\">" + title + "</div>").appendTo(menu);
-	var itemContainer = $("<div class=\"menu-item-container\"></div>")[0];
-	$(itemContainer).appendTo(menu);
+		this.createTitleElement(title);
+	//Create item container
+	this.createItemContainerElement();
 	//Create a description container, if there are descriptions
-	var descriptionContainer;
 	if (descriptions)
-	{
-		descriptionContainer = $("<div class=\"menu-item-description-container\"></div>")[0];
-		$(descriptionContainer).appendTo(menu);
-	}
+		this.createDescriptionContainerElement();
 	//Add items to the item container
 	$(items).each(function(index, itemText){
-		var item = $(`<div class="menu-item">${itemText}</div>`)[0];
-		if (index === 0)
-			$(item).addClass("menu-item-selected");
-		$(item).appendTo(itemContainer);
-		menuObject.html.items.push(item);
+		menuObject.addItem(itemText);
 	});
 	//Add descriptions, if they exist
 	if (descriptions)
 	{
 		$(descriptions).each(function(index, descriptionText){
-			var desc = $(`<div class="menu-item-description">${descriptionText}</div>`)[0];
-			$(desc).appendTo(descriptionContainer);
-			menuObject.html.descriptions.push(desc);
+			menuObject.addDescription(descriptionText);
 		});
 	}
 	//Add the menu to the global menu array
@@ -117,11 +153,72 @@ function DynamicMenu(itemArray)
 	this.initialize();
 }
 
+
 DynamicMenu.prototype = new Menu;
 
-DynamicMenu.prototype.initialize = function()
+
+DynamicMenu.prototype.initialize = function(args)
 {
-	console.log("it's working");
+	var menuObject = this;
+	//Do some error checking
+	if (typeof args.items === "undefined")
+	{
+		console.log("Your argument array must have an 'items' property.");
+		return false;
+	}
+	else if (typeof args.items !== "object")
+	{
+		console.log("The 'items' property of the argument of a dynamic array constructor must be an array.");
+		return false;
+	}
+	else if (typeof args.items[0] !== "object")
+	{
+		console.log("The 'items' property of the argument of a dynamic array constructor must be an array.");
+		return false;
+	}
+	if (typeof args.itemTextProperty === "undefined")
+	{
+		console.log("Your argument array must have an 'itemTextProperty' property.");
+		return false;
+	}
+	if (typeof args.id === "undefined")
+	{
+		console.log("You argument array must have an 'id' property.");
+		return false;
+	}
+	var items = args.items;
+	var id = args.id;
+	var title = false;
+	var openWith = false;
+	if (typeof args.title !== "undefined")
+		title = args.title;
+	if (typeof args.openWith !== "undefined")
+	{
+		if (!isNaN(Number(args.openWith)))
+		{
+			openWith = Number(args.openWith);
+		}
+	}
+	this.createMenuElement(id);
+	if (title)
+		this.createTitleElement(title);
+	this.createItemContainerElement();
+	if (descriptions)
+		this.createDescriptionContainerElement();
+	global_menus.menus.push(this);
+	if (openWith !== false)
+		global_menus.toggleKeyCodes.push(openWith);
+}
+
+
+DynamicMenu.prototype.update = function()
+{
+	//Clear the items container
+	$(this.html.menu).find("menu-item-container").empty();
+	var menuObject = this;
+	$(this.itemArray).each(function(index, item){
+
+	});
 }
 
 

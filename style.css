@@ -28,7 +28,7 @@ MENU STUFF
 	border: 2px solid gray;
 	border-radius: 5px;
 	padding: 1em;
-	background-color: #79d;
+	background-color: #eee;
 	font-family: sans-serif;
 }
 
@@ -65,7 +65,9 @@ MENU ITEM STUFF
 
 .menu-item-description-container
 {
-	float: right;
+	float: left;
+	margin-left: 2em;
+	width: auto;
 	padding: 1em;
 	border: 1px solid gray;
 	border-radius: 5px;
@@ -76,19 +78,16 @@ MENU ITEM STUFF
 .menu-item
 {
 	margin: .1em;
-	padding: .3em;
+	padding: .5em;
 }
 
 
 .menu-item-selected
 {
-	border-radius: 5px;
+	border-radius: 3px;
+	background-color: #ff8;
 }
 
-.menu-item-selected
-{
-	background-color: #beb;
-}
 
 
 .menu-item-description
@@ -114,7 +113,8 @@ MENU TITLE STUFF
 	text-align: center;
 	font-size: 1.5em;
 	font-weight: bold;
-	margin-bottom: .5em;
+	margin-bottom: .7em;
+	border-bottom: 1px solid #aaa;
 }
 
 
