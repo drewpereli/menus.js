@@ -68,14 +68,19 @@
 		var arguments = {
 			id: "unique_html_id", //REQUIRED
 			items: array_of_objects, //REQUIRED
-			descriptions: ["Description of Item 1", "Description of Item 2", . . . "Description of Item n"], //OPTIONAL
+			getItemText: function(item){ //REQUIRED
+				//returns the text that should be displayed for the menu item representing the item paramater
+			},
+			getDescriptionText: function(item){ //OPTIONAL
+				//returns the description text that should be displayed for the menu item representing the item paramater
+			},
 			title: "Menu Title", //OPTIONAL
 			openWith: keyCode, //OPTIONAL
 		};
 		new DynamicMenu(arguments);
 	</pre>
 	<p>
-		Instead of supplying the menu item text directly in the arguments, you supply a reference to an array of objects. You're probably wondering where the text of the menu item comes from. It comes from a method that <b>must exist</b> as a property of each object in your items array called <span class="javascript">getMenuText</span>. You must create this method. The item text will be whatever the method returns. 
+		Instead of supplying the menu item text directly in the arguments, you supply a reference to an array of objects. You're probably wondering where the text of the menu item comes from. It comes from a the required argument "getItemText". This argument is a method that that takes an object as an argument, and returns the text that should be displayed on the menu item representing that object. When the menu is being generated or updated, the menu controller will iterate through each item in the items array and feed the item into "getItemText" to determine what text should be used.
 	</p>
 	<p>
 		For example, let's say you had an array of "person" objects called "people". Each "person" has multiple properties associated with it, such as "firstName", "lastName", "email", etc. Let's say you want to set up a menu where each person in the array is represented by a menu item, and you want the text of each menu item to be the corresponding person's first name followed by a space followed by their last name. You might set up something like this:
@@ -86,14 +91,14 @@
 			this.firstName = firstName;
 			this.lastName = lastName;
 			this.email = email;
-			this.getMenuText = function()
-			{
-				return this.firstName + " " + this.lastName;
-			}
 		}
 		var arguments = {
 			id: "people_menu",
 			items: people,
+			getItemText: function(item)
+			{
+				return item.firstName + " " + item.lastName;
+			}
 		};
 		new DynamicMenu(arguments);
 	</pre>

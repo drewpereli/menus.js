@@ -151,7 +151,7 @@ function DynamicMenu(args)
 {
 	this.type = "DYNAMIC";
 	this.itemArray;
-	this.itemTextProperty; //A string representing the name of the item property that corresponds to the item text
+	this.getItemText;
 	this.initialize(args);
 }
 
@@ -178,9 +178,14 @@ DynamicMenu.prototype.initialize = function(args)
 		console.log("The 'items' property of the argument of a dynamic array constructor must be an array.");
 		return false;
 	}
-	if (typeof args.itemTextProperty === "undefined")
+	if (typeof args.getItemText === "undefined")
 	{
 		console.log("Your argument array must have an 'itemTextProperty' property.");
+		return false;
+	}
+	else if (typeof args.getItemText !== "function")
+	{
+		console.log("The 'getItemText' property must be a function.");
 		return false;
 	}
 	if (typeof args.id === "undefined")
@@ -191,7 +196,7 @@ DynamicMenu.prototype.initialize = function(args)
 	var items = args.items;
 	this.itemArray = items;
 	var id = args.id;
-	this.itemTextProperty = args.itemTextProperty;
+	this.getItemText = args.getItemText;
 	var title = false;
 	var openWith = false;
 	var descriptions = false;
@@ -227,7 +232,7 @@ DynamicMenu.prototype.update = function()
 	//Clear the items container
 	this.clearItems();
 	$(this.itemArray).each(function(index, item){
-		menuObject.addItem(item.getMenuText());
+		menuObject.addItem(menuObject.getItemText(item));
 	});
 	//If the menu has descriptions, do the same with descriptions
 	if (this.descriptions)

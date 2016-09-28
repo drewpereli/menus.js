@@ -77,7 +77,10 @@
 		var args = {
 			id: "people_menu",
 			items: people,
-			itemTextProperty: "firstName",
+			getItemText: function(item)
+			{
+				return item.firstName + " " + item.lastName;
+			},
 			title: "People",
 			openWith: "52"
 		};
