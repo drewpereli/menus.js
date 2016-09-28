@@ -21,13 +21,29 @@ MENU STUFF
 .menu
 {
 	position: absolute;
-	display: inline;
+	width: 30%;
+	margin-left: 35%;
+	margin-right: 35%;
 	margin-top: 10%;
 	border: 2px solid gray;
 	border-radius: 5px;
 	padding: 1em;
 	background-color: #79d;
 	font-family: sans-serif;
+}
+
+.menu-lg
+{
+	width: 50%;
+	margin-left: 25%;
+	margin-right: 25%;
+}
+
+.menu-sm
+{
+	width: 20%;
+	margin-left: 40%;
+	margin-right: 40%;
 }
 
 

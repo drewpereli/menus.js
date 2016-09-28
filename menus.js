@@ -67,11 +67,11 @@ StaticMenu.prototype.initialize = function(args)
 	//Set up the html
 	var menu = $("<div id=\"" + id + "\" class=\"menu menu-hide\"></div>")[0];
 	this.html.menu = menu;
+	//Create the menu container, if there isn't one already.
 	$(menu).appendTo("#menu-container");
 	//Create a menu title, if there is one
 	if (title)
 		$("<div class=\"menu-title\">" + title + "</div>").appendTo(menu);
-	//Create a menu item container
 	var itemContainer = $("<div class=\"menu-item-container\"></div>")[0];
 	$(itemContainer).appendTo(menu);
 	//Create a description container, if there are descriptions
