@@ -34,6 +34,13 @@
 		}
 	});
 	*/
+	var people;
+	function Person(firstName, lastName)
+	{
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	
 	$(document).ready(function(){
 		var menu1 = global_menus.getMenuFromId("menu1");
 		menu1.onEnter = function()
@@ -58,8 +65,34 @@
 			],
 			title: "My Awesome Menu",
 			openWith: "51",
-		}
+		};
 		new StaticMenu(args);
 		//
+		//Dynamic Menu Test
+		people = [];
+		people.push(new Person("Drew", "Pereli"));
+		people.push(new Person("John", "Smith"));
+		people.push(new Person("Steve", "Jones"));
+
+		var args = {
+			id: "people_menu",
+			items: people,
+			itemTextProperty: "firstName",
+			title: "People",
+			openWith: "52"
+		};
+		new DynamicMenu(args);
 	});
 </script>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -73,6 +73,7 @@ Menu.prototype.addDescription = function(descriptionText)
 
 function StaticMenu(args)
 {
+	this.type = "STATIC";
 	this.initialize(args);
 }
 
@@ -137,7 +138,7 @@ StaticMenu.prototype.initialize = function(args)
 	//Add the menu to the global menu array
 	global_menus.menus.push(this);
 	//Add the toggle on this key thing
-	if (openWith !== false)
+	if (openWith !== false && openWith !== 27)
 		global_menus.toggleKeyCodes.push(openWith);
 }
 
@@ -146,11 +147,12 @@ StaticMenu.prototype.initialize = function(args)
 
 
 
-function DynamicMenu(itemArray)
+function DynamicMenu(args)
 {
-	this.itemArray = itemArray;
-
-	this.initialize();
+	this.type = "DYNAMIC";
+	this.itemArray;
+	this.itemTextProperty; //A string representing the name of the item property that corresponds to the item text
+	this.initialize(args);
 }
 
 
@@ -187,9 +189,12 @@ DynamicMenu.prototype.initialize = function(args)
 		return false;
 	}
 	var items = args.items;
+	this.itemArray = items;
 	var id = args.id;
+	this.itemTextProperty = args.itemTextProperty;
 	var title = false;
 	var openWith = false;
+	var descriptions = false;
 	if (typeof args.title !== "undefined")
 		title = args.title;
 	if (typeof args.openWith !== "undefined")
@@ -199,6 +204,11 @@ DynamicMenu.prototype.initialize = function(args)
 			openWith = Number(args.openWith);
 		}
 	}
+	if (typeof args.descriptions !== "undefined")
+	{
+		this.descriptions = true;
+		descriptions = args.descriptions;
+	}
 	this.createMenuElement(id);
 	if (title)
 		this.createTitleElement(title);
@@ -206,21 +216,42 @@ DynamicMenu.prototype.initialize = function(args)
 	if (descriptions)
 		this.createDescriptionContainerElement();
 	global_menus.menus.push(this);
-	if (openWith !== false)
+	if (openWith !== false && openWith !== 27)
 		global_menus.toggleKeyCodes.push(openWith);
 }
 
 
 DynamicMenu.prototype.update = function()
 {
-	//Clear the items container
-	$(this.html.menu).find("menu-item-container").empty();
 	var menuObject = this;
+	//Clear the items container
+	this.clearItems();
 	$(this.itemArray).each(function(index, item){
-
+		menuObject.addItem(item.getMenuText());
 	});
+	//If the menu has descriptions, do the same with descriptions
+	if (this.descriptions)
+	{
+		this.clearDescriptions();
+		$(this.itemArray).each(function(index, item){
+			menuObject.addDescription(item.getMenuDescription());
+		});
+	}
 }
 
+
+DynamicMenu.prototype.clearItems = function()
+{
+	$(this.html.menu).find(".menu-item-container").empty();
+	this.html.items = [];
+}
+
+
+DynamicMenu.prototype.clearDescriptions = function()
+{
+	$(this.html.menu).find(".menu-item-description-container").empty();
+	this.html.descriptions = [];
+}
 
 //var array = ["a"];
 //var m = new DynamicMenu(array);
@@ -295,7 +326,8 @@ global_menus.initialize = function()
 		{
 			var openWith = $(menuElement).attr("open-with");//Get the keycode
 			openWith = Number(openWith); //Conver it to a number
-			global_menus.toggleKeyCodes.push(openWith);
+			if (openWith !== 27)
+				global_menus.toggleKeyCodes.push(openWith);
 		}
 		else
 		{
@@ -322,19 +354,20 @@ global_menus.initialize = function()
 			var menuToToggle = global_menus.menus[index];
 			global_menus.toggle(menuToToggle.html.menu.id);
 		}
+		if (e.which === 27) //If it's the escape key
+			global_menus.close();
 	});
 }
 
 
-//Opens or closes the menu
+//Opens or closes the menu. Only opens it if there isn't another menu open. 
 global_menus.toggle = function(menuId)
 {
-	if ($("#" + menuId).hasClass("menu-hide"))
-		this.open(menuId);
-	else if ($("#" + menuId).hasClass("menu-show"))
+	var menu = this.getMenu(menuId);
+	if (this.openMenu === menu)
 		this.close();
-	else
-		console.log("Menu of id " + menuId + " has neither the menu-hide nor menu-show class");
+	else if (this.openMenu === false)
+		this.open(menuId);
 }
 
 global_menus.open = function(menuId)
@@ -342,8 +375,11 @@ global_menus.open = function(menuId)
 	//Hide the currently shown menu, if there is one.
 	$(".menu-show").removeClass("menu-show").addClass("menu-hide");
 	var menuToShow = $("#" + menuId);
-	$(menuToShow).removeClass("menu-hide").addClass("menu-show");
 	this.openMenu = this.getMenuFromId(menuId);
+	//If it's a dynamic menu, update it
+	if (this.openMenu.type === "DYNAMIC")
+		this.openMenu.update();
+	$(menuToShow).removeClass("menu-hide").addClass("menu-show");
 }
 
 

@@ -31,7 +31,7 @@
 		Menus must include the class "menu". Menu items must include the class "menu-item".
 	</p>
 	<p>
-		The "open-with" attribute is optional. You can set it to the <a href="http://keycode.info/">keycode</a> of the key you would like to be able to open the menu with.
+		The "open-with" attribute is optional. You can set it to the <a href="http://keycode.info/">keycode</a> of the key you would like to be able to open the menu with. The only keycode you cannot use is 27, which corresponds to the escape key. This is because the escape key is used to exit out of any menu. 
 	</p>
 	<p>
 		The second way to create a static menu is with javascript, using the StaticMenu() constructor.
@@ -46,11 +46,16 @@
 			descriptions: ["Description of Item 1", "Description of Item 2", . . . "Description of Item n"], //OPTIONAL
 			title: "Menu Title", //OPTIONAL
 			openWith: keyCode, //OPTIONAL
-		}
+		};
+		new StaticMenu(arguments);
 	</pre>
 	<p>
 		The order of the key/value pairs does not matter.
 	</p>
+
+
+
+
 	<h2>Dynamic Menu</h2>
 	<p>
 		Dynamic menus work almost the same as static menus. The difference is, you can link a dynamic menu to an array of objects, and the menu text will be filled and updated based on those objects.
@@ -59,6 +64,41 @@
 	<p>
 		Dynamic menus can only be created using javascript. The process is almost the same as creating a static menu with javascript. But there are some extra paramaters required. 
 	</p>
+	<pre>
+		var arguments = {
+			id: "unique_html_id", //REQUIRED
+			items: array_of_objects, //REQUIRED
+			descriptions: ["Description of Item 1", "Description of Item 2", . . . "Description of Item n"], //OPTIONAL
+			title: "Menu Title", //OPTIONAL
+			openWith: keyCode, //OPTIONAL
+		};
+		new DynamicMenu(arguments);
+	</pre>
+	<p>
+		Instead of supplying the menu item text directly in the arguments, you supply a reference to an array of objects. You're probably wondering where the text of the menu item comes from. It comes from a method that <b>must exist</b> as a property of each object in your items array called <span class="javascript">getMenuText</span>. You must create this method. The item text will be whatever the method returns. 
+	</p>
+	<p>
+		For example, let's say you had an array of "person" objects called "people". Each "person" has multiple properties associated with it, such as "firstName", "lastName", "email", etc. Let's say you want to set up a menu where each person in the array is represented by a menu item, and you want the text of each menu item to be the corresponding person's first name followed by a space followed by their last name. You might set up something like this:
+	</p>
+	<pre>
+		function Person(firstName, lastName, email)
+		{
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.email = email;
+			this.getMenuText = function()
+			{
+				return this.firstName + " " + this.lastName;
+			}
+		}
+		var arguments = {
+			id: "people_menu",
+			items: people,
+		};
+		new DynamicMenu(arguments);
+	</pre>
+
+
 	<h2>Using a Menu</h2>
 	<h3>Accessing a Menu</h3>
 	<p>
