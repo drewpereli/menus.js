@@ -27,6 +27,9 @@
 	<p>
 		The only other library that Menu.js requires is jQuery.
 	</p>
+	<p>
+		Also, you must include the menu.js script file after the "body" element of your document.
+	</p>
 	<h2>Static Menus</h2>
 	<p>Menu.js includes both static and dynamic menus. We'll explore static menus first.</p>
 	<h3>Creating a Static Menu</h3>
@@ -122,8 +125,8 @@
 	</p>
 	<h3>Opening and Closing a Menu</h3>
 	<p>
-		To open or close your menu, simply call the function <span class="javascript">global_menus.toggle(MENU_ID)"</span>.
-		You can only have one menu open at a time. If there is currently a different menu open, "toggle" will automatically close it before opening your menu. 
+		There are two ways to open or close a menu. If you set the "keycode" argument when creating the menu, simply press the key corresponding to that keycode to open or close the menu. If you didn't set that argument, you can call the function <span class="javascript">global_menus.toggle(MENU_ID)"</span> to open or close your menu.
+		You can only have one menu open at a time. If you try to open a menu while another menu is open, nothing will happen.
 	</p>
 	<h3>Selecting Items in a Menu</h3>
 	<p>
