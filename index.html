@@ -2,24 +2,13 @@
 <html>
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script src="menus.js"></script>
 	<link type="text/css" rel="stylesheet" href="style.css" />
 </head>
 <body>
-	<div id="menu1" class="menu menu-lg" open-with="49">
-		<div class="menu-title">Menu 1</div>
-		<div class="menu-item">Item 1<div class="menu-item-description">Description for item 1</div></div>
-		<div class="menu-item">Item 2<div class="menu-item-description">Description for item 2</div></div>
-		<div class="menu-item">Item 3<div class="menu-item-description">Description for item 3</div></div>
-	</div>
-	<div id="menu2" class="menu menu-sm" open-with="50">
-		<div class="menu-title">Menu 2</div>
-		<div class="menu-item">Item 1</div>
-		<div class="menu-item">Item 2</div>
-		<div class="menu-item">Item 3</div>
-	</div>
 </body>
 </html>
+
+<script src="menus.js"></script>
 
 <script>
 	/*
@@ -41,7 +30,6 @@
 		this.lastName = lastName;
 	}
 	
-	$(document).ready(function(){
 		var menu1 = global_menus.getMenuFromId("menu1");
 		menu1.onEnter = function()
 		{
@@ -81,11 +69,16 @@
 			{
 				return item.firstName + " " + item.lastName;
 			},
+			getDescriptionText: function(item)
+			{
+				var description = '';
+				description += `<h1>${item.firstName} ${item.lastName}</h1>`;
+				return description;
+			},
 			title: "People",
 			openWith: "52"
 		};
 		new DynamicMenu(args);
-	});
 </script>
 
 

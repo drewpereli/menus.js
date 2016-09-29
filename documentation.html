@@ -1,6 +1,22 @@
 
 <html>
 <head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<style>
+		body
+		{
+			padding: 2em;
+		}
+	</style>
 </head>
 <body>
 	<h1>Menu.js</h1>
@@ -15,26 +31,7 @@
 	<p>Menu.js includes both static and dynamic menus. We'll explore static menus first.</p>
 	<h3>Creating a Static Menu</h3>
 	<p>
-		There are two ways to create static menus. The first is with html.
-	</p>
-		<pre>
-			&lt;div class="menu" id="menu_name" open-with="keycode_to_open_with"&gt;<br />
-			    &lt;div class="menu-item"&gt;Menu Item 1 Text&lt;/div&gt;<br />
-			    &lt;div class="menu-item"&gt;Menu Item 2 Text&lt;/div&gt;<br />
-			    &lt;div class="menu-item"&gt;Menu Item 3 Text&lt;/div&gt;<br />
-			&lt;/div&gt;
-		</pre>
-	<p>
-		Menus must have unique ID attributes!
-	</p>
-	<p>
-		Menus must include the class "menu". Menu items must include the class "menu-item".
-	</p>
-	<p>
-		The "open-with" attribute is optional. You can set it to the <a href="http://keycode.info/">keycode</a> of the key you would like to be able to open the menu with. The only keycode you cannot use is 27, which corresponds to the escape key. This is because the escape key is used to exit out of any menu. 
-	</p>
-	<p>
-		The second way to create a static menu is with javascript, using the StaticMenu() constructor.
+		Static menus are created with javascript, using the StaticMenu() constructor.
 	</p>
 	<p>
 		The StaticMenu() constructor takes an associative array as its one argument. The array has a couple required properties and many optional properties. Here is the structure of the array.
@@ -52,7 +49,9 @@
 	<p>
 		The order of the key/value pairs does not matter.
 	</p>
-
+	<p>
+		The "open-with" attribute is optional. You can set it to the <a href="http://keycode.info/">keycode</a> of the key you would like to be able to open the menu with. The only keycodes you cannot use are 27 (escape key), 38 (up arrow), and 40 (down arrow).
+	</p>
 
 
 
@@ -83,7 +82,7 @@
 		Instead of supplying the menu item text directly in the arguments, you supply a reference to an array of objects. You're probably wondering where the text of the menu item comes from. It comes from a the required argument "getItemText". This argument is a method that that takes an object as an argument, and returns the text that should be displayed on the menu item representing that object. When the menu is being generated or updated, the menu controller will iterate through each item in the items array and feed the item into "getItemText" to determine what text should be used.
 	</p>
 	<p>
-		For example, let's say you had an array of "person" objects called "people". Each "person" has multiple properties associated with it, such as "firstName", "lastName", "email", etc. Let's say you want to set up a menu where each person in the array is represented by a menu item, and you want the text of each menu item to be the corresponding person's first name followed by a space followed by their last name. You might set up something like this:
+		For example, let's say you had an array of "person" objects called "people". Each "person" has multiple properties associated with it, such as "firstName", "lastName", "email", etc. Let's say you want to set up a menu where each person in the array is represented by a menu item, and you want the text of each menu item to be the corresponding person's first name followed by a space followed by their last name. And let's say you wanted the description to display the person's full name as a header, with the word "email" followed by their email address bellow. You might set up something like this:
 	</p>
 	<pre>
 		function Person(firstName, lastName, email)
@@ -98,10 +97,19 @@
 			getItemText: function(item)
 			{
 				return item.firstName + " " + item.lastName;
+			},
+			getDescriptionText: function(item)
+			{
+				var descriptionText = "&lt;h1&gt;" + item.firstName + " " + item.lastName + "&lt;\h1&gt;"; 
+				descriptionText += "&lt;div&gt;Email: " + item.email + "&lt;\div&gt;";
+				return descriptionText;
 			}
 		};
 		new DynamicMenu(arguments);
 	</pre>
+	<p>
+		With this setup, your menu will automatically update itself based on the "person" objects in the people array.
+	</p>
 
 
 	<h2>Using a Menu</h2>

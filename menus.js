@@ -152,6 +152,7 @@ function DynamicMenu(args)
 	this.type = "DYNAMIC";
 	this.itemArray;
 	this.getItemText;
+	this.getDescriptionText;
 	this.initialize(args);
 }
 
@@ -209,17 +210,26 @@ DynamicMenu.prototype.initialize = function(args)
 			openWith = Number(args.openWith);
 		}
 	}
-	if (typeof args.descriptions !== "undefined")
+	if (typeof args.getDescriptionText !== "undefined")
 	{
-		this.descriptions = true;
-		descriptions = args.descriptions;
+		if (typeof args.getDescriptionText !== "function")
+		{
+			console.log("The 'getDescriptionText' preoperty must be a function.");
+		}
+		else
+		{
+			this.descriptions = true;
+			this.getDescriptionText = args.getDescriptionText;
+		}
 	}
 	this.createMenuElement(id);
 	if (title)
 		this.createTitleElement(title);
 	this.createItemContainerElement();
-	if (descriptions)
+	if (this.descriptions)
+	{
 		this.createDescriptionContainerElement();
+	}
 	global_menus.menus.push(this);
 	if (openWith !== false && openWith !== 27)
 		global_menus.toggleKeyCodes.push(openWith);
@@ -239,7 +249,7 @@ DynamicMenu.prototype.update = function()
 	{
 		this.clearDescriptions();
 		$(this.itemArray).each(function(index, item){
-			menuObject.addDescription(item.getMenuDescription());
+			menuObject.addDescription(menuObject.getDescriptionText(item));
 		});
 	}
 }
@@ -262,23 +272,6 @@ DynamicMenu.prototype.clearDescriptions = function()
 //var m = new DynamicMenu(array);
 
 
-$(document).ready(function(){
-	var importedNames = ["Menu"];
-	$(importedNames).each(function(index, name){
-		var imported = document.createElement("script");
-		imported.src = name + ".js";
-		document.head.appendChild(imported);
-	});
-	//Add event listeners
-	$(document).keydown(function(e)
-	{
-		if (e.which === 38)
-			global_menus.selectUp();
-		else if (e.which === 40)
-			global_menus.selectDown();
-	});
-	global_menus.initialize();
-});
 
 ////////////////////////
 
@@ -289,61 +282,21 @@ var global_menus =
 	toggleKeyCodes: [], //The key codes of the buttons that open the menu
 };
 
+
+
 global_menus.initialize = function()
 {
-	var menuElements = $(".menu"); //Get all the menu dom elements
-	$(menuElements).each(function(index, menuElement){ //Do stuff to each menu dom element
-		$(menuElement).addClass("menu-hide"); //Make the menu element hidden by default
-		var menu = new Menu(); //Initialize a menu object
-		menu.html.menu = menuElement; //Set the menu object html.menu instance variable to the menu dome object
-		menu.html.items = $(menuElement).children(".menu-item"); //Set the menu object html.items instance variable to an array containing the menu item dom objects
-		$(menu.html.items).each(function(index, item){ //For each item, if there is a description, add it to menu.html.descriptions
-			var desc = $(item).children(".menu-item-description");
-			if (desc.length > 0) //If there is a description
-			{
-				menu.html.descriptions[index] = desc[0];
-				menu.descriptions = true;
-				//Unless the index === 0 which would mean it's the default selected menu item, hide the description
-				if (index !== 0)
-				{
-					$(desc[0]).addClass("menu-item-description-hidden");
-				}
-			}
-			else
-			{
-				menu.html.descriptions[index] = $("<div class=\"menu-item-description\"></div>");
-			}
-		});
-		$(menu.html.items[0]).addClass("menu-item-selected"); //Have the first menu item selected by default
-		//Create the item container and description container
-		var itemCont = document.createElement('div'); //Create the item container
-		$(itemCont).addClass("menu-item-container").appendTo(menuElement); //Add the item container class and append it to the meny element
-		$(menu.html.items).appendTo(itemCont); //Append the menu items to the item container
-		if (menu.descriptions) //If at least one of the menu items has a description
-		{
-			var descCont = document.createElement('div'); //Create the description container
-			$(descCont).addClass("menu-item-description-container").appendTo(menuElement); //Add the description container class and append it to the meny element
-			$(menu.html.descriptions).appendTo(descCont); //Append the menu items to the description container
-		}
-		global_menus.menus.push(menu); //Add the menu to the global_menus array of menus
-		//If the "open-with" attribute is set on the html element, add it to the "toggleKeyCodes" array.
-		if ($(menuElement).is("[open-with]"))//If the menu has the "open-with" attribute set
-		{
-			var openWith = $(menuElement).attr("open-with");//Get the keycode
-			openWith = Number(openWith); //Conver it to a number
-			if (openWith !== 27)
-				global_menus.toggleKeyCodes.push(openWith);
-		}
-		else
-		{
-			global_menus.toggleKeyCodes.push(false);
-		}
-	});
 	//Create the "menu container" DOM element and add all the menus to it
 	$("<div id=\"menu-container\"></div>").appendTo(document.body);
-	$(menuElements).appendTo("#menu-container");
 	//Add the enter key event listener
 	$(document).keydown(function(e){
+		//If a key pressed toggles a menu
+		if (global_menus.toggleKeyCodes.indexOf(e.which) !== -1)
+		{
+			var index = global_menus.toggleKeyCodes.indexOf(e.which);
+			var menuToToggle = global_menus.menus[index];
+			global_menus.toggle(menuToToggle.html.menu.id);
+		}
 		if (e.which === 13) //If it's the enter key
 		{
 			//Active the "on enter" function for the open menu, if there is one. 
@@ -352,15 +305,12 @@ global_menus.initialize = function()
 				global_menus.openMenu.onEnter();
 			}
 		}
-		//If a key pressed toggles a menu
-		if (global_menus.toggleKeyCodes.indexOf(e.which) !== -1)
-		{
-			var index = global_menus.toggleKeyCodes.indexOf(e.which);
-			var menuToToggle = global_menus.menus[index];
-			global_menus.toggle(menuToToggle.html.menu.id);
-		}
-		if (e.which === 27) //If it's the escape key
+		else if (e.which === 27) //If it's the escape key
 			global_menus.close();
+		else if (e.which === 38) // If it's the up key
+			global_menus.selectUp();
+		else if (e.which === 40) //If it's the down key
+			global_menus.selectDown();
 	});
 }
 
@@ -467,6 +417,8 @@ global_menus.getMenu = function(menuId)
 }
 
 
+
+global_menus.initialize();
 
 
 
