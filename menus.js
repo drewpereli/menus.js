@@ -39,7 +39,10 @@ Menu.prototype.createTitleElement = function(title)
 
 Menu.prototype.createItemContainerElement = function()
 {
-	$("<div class=\"menu-item-container\"></div>").appendTo(this.html.menu);
+	var itemContainer = $("<div class=\"menu-item-container\"></div>")[0];
+	if (this.descriptions)
+		$(itemContainer).addClass("description-menu-item-container");
+	$(itemContainer).appendTo(this.html.menu);
 }
 
 
@@ -52,7 +55,7 @@ Menu.prototype.createDescriptionContainerElement = function()
 Menu.prototype.addItem = function(itemText)
 {
 	var item = $(`<div class="menu-item">${itemText}</div>`)[0];
-	if (this.html.items.length === 0)
+	if (this.html.items.length === this.selectedIndex)
 		$(item).addClass("menu-item-selected");
 	$(item).appendTo($(this.html.menu).find(".menu-item-container"));
 	this.html.items.push(item);
@@ -100,6 +103,7 @@ StaticMenu.prototype.initialize = function(args)
 	var descriptions = false;
 	var title = false;
 	var openWith = false;
+	var onEnter = false;
 	if (typeof args.descriptions !== "undefined")
 	{
 		this.descriptions = true;
@@ -112,6 +116,18 @@ StaticMenu.prototype.initialize = function(args)
 		if (!isNaN(Number(args.openWith)))
 		{
 			openWith = Number(args.openWith);
+		}
+	}
+	if (typeof args.onEnter !== "undefined")
+	{
+		if (typeof args.onEnter === "function")
+		{
+			onEnter = true;
+			this.onEnter = args.onEnter;
+		}
+		else
+		{
+			console.log("The 'onEnter' property must be a function.");
 		}
 	}
 	//Set up the html
@@ -201,6 +217,7 @@ DynamicMenu.prototype.initialize = function(args)
 	var title = false;
 	var openWith = false;
 	var descriptions = false;
+	var onEnter = false;
 	if (typeof args.title !== "undefined")
 		title = args.title;
 	if (typeof args.openWith !== "undefined")
@@ -214,12 +231,24 @@ DynamicMenu.prototype.initialize = function(args)
 	{
 		if (typeof args.getDescriptionText !== "function")
 		{
-			console.log("The 'getDescriptionText' preoperty must be a function.");
+			console.log("The 'getDescriptionText' property must be a function.");
 		}
 		else
 		{
 			this.descriptions = true;
 			this.getDescriptionText = args.getDescriptionText;
+		}
+	}
+	if (typeof args.onEnter !== "undefined")
+	{
+		if (typeof args.onEnter === "function")
+		{
+			onEnter = true;
+			this.onEnter = args.onEnter;
+		}
+		else
+		{
+			console.log("The 'onEnter' property must be a function.");
 		}
 	}
 	this.createMenuElement(id);
@@ -241,6 +270,9 @@ DynamicMenu.prototype.update = function()
 	var menuObject = this;
 	//Clear the items container
 	this.clearItems();
+	//If the selected index is now too large because items were removed
+	if (this.selectedIndex >= this.itemArray.length)
+		this.selectedIndex = this.itemArray.length - 1;
 	$(this.itemArray).each(function(index, item){
 		menuObject.addItem(menuObject.getItemText(item));
 	});

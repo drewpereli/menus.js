@@ -31,11 +31,7 @@
 	}
 	
 		var menu1 = global_menus.getMenuFromId("menu1");
-		menu1.onEnter = function()
-		{
-			console.log(this.getSelectedIndex());
-			console.log(this.getSelectedText());
-		}
+		
 		//Static menu test
 		var args = {
 			id: "my_menu",
@@ -53,6 +49,10 @@
 			],
 			title: "My Awesome Menu",
 			openWith: "51",
+			onEnter: function(){
+				console.log(this.getSelectedText());
+				return;
+			}
 		};
 		new StaticMenu(args);
 		//
@@ -69,16 +69,20 @@
 			{
 				return item.firstName + " " + item.lastName;
 			},
-			getDescriptionText: function(item)
+			getDescriptionsText: function(item)
 			{
 				var description = '';
 				description += `<h1>${item.firstName} ${item.lastName}</h1>`;
 				return description;
 			},
 			title: "People",
-			openWith: "52"
+			openWith: "52",
+			onEnter: function(){
+				var person = people[this.getSelectedIndex()];
+				console.log(person.firstName);
+			}
 		};
-		new DynamicMenu(args);
+		var people_menu = new DynamicMenu(args);
 </script>
 
 

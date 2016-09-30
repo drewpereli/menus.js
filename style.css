@@ -25,11 +25,11 @@ MENU STUFF
 	margin-left: 35%;
 	margin-right: 35%;
 	margin-top: 10%;
-	border: 2px solid gray;
+	border: 2px solid #111;
 	border-radius: 5px;
-	padding: 1em;
 	background-color: #fafafa;
 	font-family: sans-serif;
+	padding-bottom: 1em;
 }
 
 .menu-lg
@@ -57,21 +57,38 @@ MENU STUFF
 MENU ITEM STUFF
 */
 
-.menu-item-container
+.menu-item-container, .description-menu-item-container
 {
 	float: left;
-	
+	margin: 0px;
+	padding: 0px;
+}
+
+.menu-item-container
+{
+	width: 90%;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.description-menu-item-container
+{
+	width: 40%;
+	margin-right: 5%;
+	margin-left: 5%;
 }
 
 .menu-item-description-container
 {
 	float: left;
-	margin-left: 2em;
-	width: auto;
-	padding: 1em;
-	border: 1px solid gray;
-	border-radius: 5px;
+	margin: 0px;
+	padding: 2%;
+	width: 34%;
+	margin-right: 5%;
+	margin-left: 5%;
 	background-color: #eee;
+	border: 1px solid black;
+	border-radius: 3px;
 }
 
 
@@ -113,8 +130,11 @@ MENU TITLE STUFF
 	text-align: center;
 	font-size: 1.5em;
 	font-weight: bold;
-	margin-bottom: .7em;
-	border-bottom: 1px solid #aaa;
+	padding-top: .5em;
+	padding-bottom: .5em;
+	margin-bottom: .5em;
+	background-color: #111;
+	color: #eee;
 }
 
 

@@ -46,6 +46,9 @@
 			descriptions: ["Description of Item 1", "Description of Item 2", . . . "Description of Item n"], //OPTIONAL
 			title: "Menu Title", //OPTIONAL
 			openWith: keyCode, //OPTIONAL
+			onEnter: function(){ //OPTIONAL
+				//This will be called when the user hits the enter key with this menu open.
+			}
 		};
 		new StaticMenu(arguments);
 	</pre>
@@ -55,7 +58,11 @@
 	<p>
 		The "open-with" attribute is optional. You can set it to the <a href="http://keycode.info/">keycode</a> of the key you would like to be able to open the menu with. The only keycodes you cannot use are 27 (escape key), 38 (up arrow), and 40 (down arrow).
 	</p>
-
+	<p>
+		To have the menu do something when you hit enter, you can set the "onEnter" property of the arguments array to the function you would like to execute to be executed. You can access the index of the selected item with the 
+		<span class="javascript">this.getSelectedIndex()</span> method. You can get the text of the selected menu item with the 
+		<span class="javascript">this.getSelectedText()</span> method. 
+	</p>
 
 
 	<h2>Dynamic Menu</h2>
@@ -78,6 +85,9 @@
 			},
 			title: "Menu Title", //OPTIONAL
 			openWith: keyCode, //OPTIONAL
+			onEnter: function(){ //OPTIONAL
+				//This will be called when the user hits the enter key with this menu open.
+			}
 		};
 		new DynamicMenu(arguments);
 	</pre>
@@ -85,7 +95,7 @@
 		Instead of supplying the menu item text directly in the arguments, you supply a reference to an array of objects. You're probably wondering where the text of the menu item comes from. It comes from a the required argument "getItemText". This argument is a method that that takes an object as an argument, and returns the text that should be displayed on the menu item representing that object. When the menu is being generated or updated, the menu controller will iterate through each item in the items array and feed the item into "getItemText" to determine what text should be used.
 	</p>
 	<p>
-		For example, let's say you had an array of "person" objects called "people". Each "person" has multiple properties associated with it, such as "firstName", "lastName", "email", etc. Let's say you want to set up a menu where each person in the array is represented by a menu item, and you want the text of each menu item to be the corresponding person's first name followed by a space followed by their last name. And let's say you wanted the description to display the person's full name as a header, with the word "email" followed by their email address bellow. You might set up something like this:
+		For example, let's say you had an array of "person" objects called "people". Each "person" has multiple properties associated with it, such as "firstName", "lastName", "email", etc. Let's say you want to set up a menu where each person in the array is represented by a menu item, and you want the text of each menu item to be the corresponding person's first name followed by a space followed by their last name. And let's say you wanted the description to display the person's full name as a header, with the word "email" followed by their email address bellow. And let's say you want to write the selected person's first name to the console when you hit the enter key. You might set up something like this:
 	</p>
 	<pre>
 		function Person(firstName, lastName, email)
@@ -106,12 +116,20 @@
 				var descriptionText = "&lt;h1&gt;" + item.firstName + " " + item.lastName + "&lt;\h1&gt;"; 
 				descriptionText += "&lt;div&gt;Email: " + item.email + "&lt;\div&gt;";
 				return descriptionText;
+			},
+			onEnter: function()
+			{
+				var selectedPerson = people[this.getSelectedIndex()];
+				console.log(selectedPerson.firstName);
 			}
 		};
 		new DynamicMenu(arguments);
 	</pre>
 	<p>
 		With this setup, your menu will automatically update itself based on the "person" objects in the people array.
+	</p>
+	<p>
+		If the "items" array changes while the menu is open and you want the menu to reflect the changes, call the menu's <span class="javascript">update()</span> method. 
 	</p>
 
 
@@ -131,11 +149,6 @@
 	<h3>Selecting Items in a Menu</h3>
 	<p>
 		By default, the first item in a menu is selected. To select a different item, use the up and down arrow keys.
-	</p>
-	<p>
-		To have the menu do something when you hit enter, you can set the <span class="javascript">onEnter</span> property of the menu object to the function you would like to execute. You can access the index of the selected item with the 
-		<span class="javascript">this.getSelectedIndex()</span> method. You can get the text of the selected meny item with the 
-		<span class="javascript">this.getSelectedText()</span> method. 
 	</p>
 </body>
 </html>
