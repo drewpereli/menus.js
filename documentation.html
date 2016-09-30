@@ -48,7 +48,8 @@
 			openWith: keyCode, //OPTIONAL
 			onEnter: function(){ //OPTIONAL
 				//This will be called when the user hits the enter key with this menu open.
-			}
+			},
+			size: size_string //OPTIONAL
 		};
 		new StaticMenu(arguments);
 	</pre>
@@ -63,9 +64,12 @@
 		<span class="javascript">this.getSelectedIndex()</span> method. You can get the text of the selected menu item with the 
 		<span class="javascript">this.getSelectedText()</span> method. 
 	</p>
+	<p>
+		The optional "size" argument sets the size of the menu. It can be one of five options: "hg", "lg", "md", "sm", "xs" (huge, large, medium, small, extra small). All menus are "md" by default.
+	</p>
 
 
-	<h2>Dynamic Menu</h2>
+	<h2>Dynamic Menus</h2>
 	<p>
 		Dynamic menus work almost the same as static menus. The difference is, you can link a dynamic menu to an array of objects, and the menu text will be filled and updated based on those objects.
 	</p>

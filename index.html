@@ -69,7 +69,7 @@
 			{
 				return item.firstName + " " + item.lastName;
 			},
-			getDescriptionsText: function(item)
+			getDescriptionText: function(item)
 			{
 				var description = '';
 				description += `<h1>${item.firstName} ${item.lastName}</h1>`;
@@ -80,7 +80,7 @@
 			onEnter: function(){
 				var person = people[this.getSelectedIndex()];
 				console.log(person.firstName);
-			}
+			},
 		};
 		var people_menu = new DynamicMenu(args);
 </script>

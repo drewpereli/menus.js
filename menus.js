@@ -22,9 +22,10 @@ Menu.prototype.getSelectedIndex = function(){return this.selectedIndex;}
 Menu.prototype.getSelectedText = function(){return this.html.items[this.selectedIndex].innerHTML;}
 
 
-Menu.prototype.createMenuElement = function(id)
+Menu.prototype.createMenuElement = function(id, size)
 {
 	var menu = $("<div id=\"" + id + "\" class=\"menu menu-hide\"></div>")[0];
+	$(menu).addClass("menu-" + size);
 	this.html.menu = menu;
 	//Append to the menu contain
 	$(menu).appendTo("#menu-container");
@@ -104,6 +105,7 @@ StaticMenu.prototype.initialize = function(args)
 	var title = false;
 	var openWith = false;
 	var onEnter = false;
+	var size = "md";
 	if (typeof args.descriptions !== "undefined")
 	{
 		this.descriptions = true;
@@ -130,8 +132,20 @@ StaticMenu.prototype.initialize = function(args)
 			console.log("The 'onEnter' property must be a function.");
 		}
 	}
+	if (typeof args.size !== "undefined")
+	{
+		var acceptableSizes = ["hg", "lg", "md", "sm", "xs"];
+		if (acceptableSizes.indexOf(args.size) === -1)
+		{
+			console.log("The 'size' property must be set to one of these options: " + acceptableSizes);
+		}
+		else
+		{
+			size = args.size;
+		}
+	}
 	//Set up the html
-	this.createMenuElement(id);
+	this.createMenuElement(id, size);
 	//Create a menu title, if there is one
 	if (title)
 		this.createTitleElement(title);
@@ -218,6 +232,7 @@ DynamicMenu.prototype.initialize = function(args)
 	var openWith = false;
 	var descriptions = false;
 	var onEnter = false;
+	var size = "md";
 	if (typeof args.title !== "undefined")
 		title = args.title;
 	if (typeof args.openWith !== "undefined")
@@ -251,7 +266,19 @@ DynamicMenu.prototype.initialize = function(args)
 			console.log("The 'onEnter' property must be a function.");
 		}
 	}
-	this.createMenuElement(id);
+	if (typeof args.size !== "undefined")
+	{
+		var acceptableSizes = ["hg", "lg", "md", "sm", "xs"];
+		if (acceptableSizes.indexOf(args.size) === -1)
+		{
+			console.log("The 'size' property must be set to one of these options: " + acceptableSizes);
+		}
+		else
+		{
+			size = args.size;
+		}
+	}
+	this.createMenuElement(id, size);
 	if (title)
 		this.createTitleElement(title);
 	this.createItemContainerElement();

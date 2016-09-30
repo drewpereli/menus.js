@@ -32,6 +32,13 @@ MENU STUFF
 	padding-bottom: 1em;
 }
 
+.menu-hg
+{
+	width: 80%;
+	margin-left: 10%;
+	margin-right: 10%;
+}
+
 .menu-lg
 {
 	width: 50%;
@@ -39,11 +46,25 @@ MENU STUFF
 	margin-right: 25%;
 }
 
+.menu-md
+{
+	width: 30%;
+	margin-left: 35%;
+	margin-right: 35%;
+}
+
 .menu-sm
 {
 	width: 20%;
 	margin-left: 40%;
 	margin-right: 40%;
+}
+
+.menu-xs
+{
+	width: 10%;
+	margin-left: 45%;
+	margin-right: 45%;
 }
 
 
