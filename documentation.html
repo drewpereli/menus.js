@@ -30,52 +30,9 @@
 	<p>
 		Also, you must include the menu.js script file after the "body" element of your document. Make sure to include a link to the "style.css" file as well.
 	</p>
-	<h2>Static Menus</h2>
-	<p>Menu.js includes both static and dynamic menus. We'll explore static menus first.</p>
-	<h3>Creating a Static Menu</h3>
+	<h2>Creating a Menu</h2>
 	<p>
-		Static menus are created with javascript, using the StaticMenu() constructor.
-	</p>
-	<p>
-		The StaticMenu() constructor takes an associative array as its one argument. The array has a couple required properties and many optional properties. Here is the structure of the array.
-	</p>
-	<pre>
-		var arguments = {
-			id: "unique_html_id", //REQUIRED
-			items: ["Item 1 text", "Item 2 text", . . . "Item n text"], //REQUIRED. 
-			descriptions: ["Description of Item 1", "Description of Item 2", . . . "Description of Item n"], //OPTIONAL
-			title: "Menu Title", //OPTIONAL
-			openWith: keyCode, //OPTIONAL
-			onEnter: function(){ //OPTIONAL
-				//This will be called when the user hits the enter key with this menu open.
-			},
-			size: size_string //OPTIONAL
-		};
-		new StaticMenu(arguments);
-	</pre>
-	<p>
-		The order of the key/value pairs does not matter.
-	</p>
-	<p>
-		The "open-with" attribute is optional. You can set it to the <a href="http://keycode.info/">keycode</a> of the key you would like to be able to open the menu with. The only keycodes you cannot use are 27 (escape key), 38 (up arrow), and 40 (down arrow).
-	</p>
-	<p>
-		To have the menu do something when you hit enter, you can set the "onEnter" property of the arguments array to the function you would like to execute to be executed. You can access the index of the selected item with the 
-		<span class="javascript">this.getSelectedIndex()</span> method. You can get the text of the selected menu item with the 
-		<span class="javascript">this.getSelectedText()</span> method. 
-	</p>
-	<p>
-		The optional "size" argument sets the size of the menu. It can be one of five options: "hg", "lg", "md", "sm", "xs" (huge, large, medium, small, extra small). All menus are "md" by default.
-	</p>
-
-
-	<h2>Dynamic Menus</h2>
-	<p>
-		Dynamic menus work almost the same as static menus. The difference is, you can link a dynamic menu to an array of objects, and the menu text will be filled and updated based on those objects.
-	</p>
-	<h3>Creating a Dynamic Menu</h3>
-	<p>
-		Dynamic menus can only be created using javascript. The process is almost the same as creating a static menu with javascript. But there are some extra paramaters required. 
+		Menus are created using javascript, using the <span class="javascript">new Menu(arguments)</span> constructor. The constructor takes an associative array as its one argument. The array has a few required properties and many optional properties. Here is the structure of the array.
 	</p>
 	<pre>
 		var arguments = {
@@ -93,10 +50,21 @@
 				//This will be called when the user hits the enter key with this menu open.
 			}
 		};
-		new DynamicMenu(arguments);
+		new Menu(arguments);
 	</pre>
 	<p>
 		Instead of supplying the menu item text directly in the arguments, you supply a reference to an array of objects. You're probably wondering where the text of the menu item comes from. It comes from a the required argument "getItemText". This argument is a method that that takes an object as an argument, and returns the text that should be displayed on the menu item representing that object. When the menu is being generated or updated, the menu controller will iterate through each item in the items array and feed the item into "getItemText" to determine what text should be used.
+	</p>
+	<p>
+		The "open-with" attribute is optional. You can set it to the <a href="http://keycode.info/">keycode</a> of the key you would like to be able to open the menu with. The only keycodes you cannot use are 27 (escape key), 38 (up arrow), and 40 (down arrow).
+	</p>
+	<p>
+		To have the menu do something when you hit enter, you can set the "onEnter" property of the arguments array to the function you would like to execute to be executed. You can access the index of the selected item with the 
+		<span class="javascript">this.getSelectedIndex()</span> method. You can get the text of the selected menu item with the 
+		<span class="javascript">this.getSelectedText()</span> method. 
+	</p>
+	<p>
+		The optional "size" argument sets the size of the menu. It can be one of five options: "hg", "lg", "md", "sm", "xs" (huge, large, medium, small, extra small). All menus are "md" by default.
 	</p>
 	<p>
 		For example, let's say you had an array of "person" objects called "people". Each "person" has multiple properties associated with it, such as "firstName", "lastName", "email", etc. Let's say you want to set up a menu where each person in the array is represented by a menu item, and you want the text of each menu item to be the corresponding person's first name followed by a space followed by their last name. And let's say you wanted the description to display the person's full name as a header, with the word "email" followed by their email address bellow. And let's say you want to write the selected person's first name to the console when you hit the enter key. You might set up something like this:

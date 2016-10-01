@@ -7,12 +7,18 @@ function Menu()
 	this.descriptions = false; //True only if at least one menu item comes with a description
 	this.onEnter = function(){};
 	this.selectedIndex = 0;
+	this.type = "MENU";
+	this.itemArray;
+	this.getItemText;
+	this.getDescriptionText;
 	this.html = 
 	{
 		menu: false,
 		items: [],
 		descriptions: [],
 	}
+
+	this.initialize(args);
 }
 
 
@@ -74,123 +80,7 @@ Menu.prototype.addDescription = function(descriptionText)
 
 
 
-
-function StaticMenu(args)
-{
-	this.type = "STATIC";
-	this.initialize(args);
-}
-
-
-StaticMenu.prototype = new Menu();
-
-
-StaticMenu.prototype.initialize = function(args)
-{
-	var menuObject = this;
-	//Do some error checking
-	if (typeof args.items === "undefined")
-	{
-		console.log("Your argument array must have an 'items' property.");
-		return false;
-	}
-	if (typeof args.id === "undefined")
-	{
-		console.log("You argument array must have an 'id' property.");
-		return false;
-	}
-	var items = args.items;
-	var id = args.id;
-	var descriptions = false;
-	var title = false;
-	var openWith = false;
-	var onEnter = false;
-	var size = "md";
-	if (typeof args.descriptions !== "undefined")
-	{
-		this.descriptions = true;
-		descriptions = args.descriptions;
-	}
-	if (typeof args.title !== "undefined")
-		title = args.title;
-	if (typeof args.openWith !== "undefined")
-	{
-		if (!isNaN(Number(args.openWith)))
-		{
-			openWith = Number(args.openWith);
-		}
-	}
-	if (typeof args.onEnter !== "undefined")
-	{
-		if (typeof args.onEnter === "function")
-		{
-			onEnter = true;
-			this.onEnter = args.onEnter;
-		}
-		else
-		{
-			console.log("The 'onEnter' property must be a function.");
-		}
-	}
-	if (typeof args.size !== "undefined")
-	{
-		var acceptableSizes = ["hg", "lg", "md", "sm", "xs"];
-		if (acceptableSizes.indexOf(args.size) === -1)
-		{
-			console.log("The 'size' property must be set to one of these options: " + acceptableSizes);
-		}
-		else
-		{
-			size = args.size;
-		}
-	}
-	//Set up the html
-	this.createMenuElement(id, size);
-	//Create a menu title, if there is one
-	if (title)
-		this.createTitleElement(title);
-	//Create item container
-	this.createItemContainerElement();
-	//Create a description container, if there are descriptions
-	if (descriptions)
-		this.createDescriptionContainerElement();
-	//Add items to the item container
-	$(items).each(function(index, itemText){
-		menuObject.addItem(itemText);
-	});
-	//Add descriptions, if they exist
-	if (descriptions)
-	{
-		$(descriptions).each(function(index, descriptionText){
-			menuObject.addDescription(descriptionText);
-		});
-	}
-	//Add the menu to the global menu array
-	global_menus.menus.push(this);
-	//Add the toggle on this key thing
-	if (openWith !== false && openWith !== 27)
-		global_menus.toggleKeyCodes.push(openWith);
-}
-
-
-
-
-
-
-function DynamicMenu(args)
-{
-	this.type = "DYNAMIC";
-	this.itemArray;
-	this.getItemText;
-	this.getDescriptionText;
-	this.initialize(args);
-}
-
-
-DynamicMenu.prototype = new Menu;
-
-
-DynamicMenu.prototype.initialize = function(args)
+Menu.prototype.initialize = function(args)
 {
 	var menuObject = this;
 	//Do some error checking
@@ -292,7 +182,7 @@ DynamicMenu.prototype.initialize = function(args)
 }
 
 
-DynamicMenu.prototype.update = function()
+Menu.prototype.update = function()
 {
 	var menuObject = this;
 	//Clear the items container
@@ -314,14 +204,14 @@ DynamicMenu.prototype.update = function()
 }
 
 
-DynamicMenu.prototype.clearItems = function()
+Menu.prototype.clearItems = function()
 {
 	$(this.html.menu).find(".menu-item-container").empty();
 	this.html.items = [];
 }
 
 
-DynamicMenu.prototype.clearDescriptions = function()
+Menu.prototype.clearDescriptions = function()
 {
 	$(this.html.menu).find(".menu-item-description-container").empty();
 	this.html.descriptions = [];
@@ -390,9 +280,7 @@ global_menus.open = function(menuId)
 	$(".menu-show").removeClass("menu-show").addClass("menu-hide");
 	var menuToShow = $("#" + menuId);
 	this.openMenu = this.getMenuFromId(menuId);
-	//If it's a dynamic menu, update it
-	if (this.openMenu.type === "DYNAMIC")
-		this.openMenu.update();
+	this.openMenu.update();
 	$(menuToShow).removeClass("menu-hide").addClass("menu-show");
 }
 
