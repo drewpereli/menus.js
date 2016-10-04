@@ -11,6 +11,7 @@ function Menu()
 	this.itemArray;
 	this.getItemText;
 	this.getDescriptionText;
+	this.wrap = false;
 	this.html = 
 	{
 		menu: false,
@@ -79,22 +80,14 @@ Menu.prototype.addDescription = function(descriptionText)
 }
 
 
-
-Menu.prototype.initialize = function(args)
+Menu.prototype.validArguments = function(args)
 {
-	var menuObject = this;
-	//Do some error checking
 	if (typeof args.items === "undefined")
 	{
 		console.log("Your argument array must have an 'items' property.");
 		return false;
 	}
 	else if (typeof args.items !== "object")
-	{
-		console.log("The 'items' property of the argument of a dynamic array constructor must be an array.");
-		return false;
-	}
-	else if (typeof args.items[0] !== "object")
 	{
 		console.log("The 'items' property of the argument of a dynamic array constructor must be an array.");
 		return false;
@@ -114,6 +107,17 @@ Menu.prototype.initialize = function(args)
 		console.log("You argument array must have an 'id' property.");
 		return false;
 	}
+}
+
+
+
+Menu.prototype.initialize = function(args)
+{
+	var menuObject = this;
+	//Do some error checking
+	if (this.validArguments(args) === false)
+		return false;
+
 	var items = args.items;
 	this.itemArray = items;
 	var id = args.id;
@@ -123,6 +127,7 @@ Menu.prototype.initialize = function(args)
 	var descriptions = false;
 	var onEnter = false;
 	var size = "md";
+	var wrap = false;
 	if (typeof args.title !== "undefined")
 		title = args.title;
 	if (typeof args.openWith !== "undefined")
@@ -168,6 +173,17 @@ Menu.prototype.initialize = function(args)
 			size = args.size;
 		}
 	}
+	if (typeof args.wrap !== "undefined")
+	{
+		if (typeof args.wrap !== "boolean")
+		{
+			console.log("The 'wrap' property must be a boolean.");
+		}
+		else
+		{
+			wrap = args.wrap;
+		}
+	}
 	this.createMenuElement(id, size);
 	if (title)
 		this.createTitleElement(title);
@@ -176,6 +192,8 @@ Menu.prototype.initialize = function(args)
 	{
 		this.createDescriptionContainerElement();
 	}
+	if (wrap)
+		this.wrap = wrap;
 	global_menus.menus.push(this);
 	if (openWith !== false && openWith !== 27)
 		global_menus.toggleKeyCodes.push(openWith);
@@ -297,6 +315,8 @@ global_menus.close = function()
 global_menus.selectUp = function()
 {
 	var selectedIndex;
+	var oldIndex;
+	var succesfulSelect = true; //The new item will only be selected if the select was valid
 	$(this.openMenu.html.items).each(function(index, item)
 	{
 		if ($(item).hasClass("menu-item-selected"))

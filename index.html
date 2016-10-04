@@ -30,33 +30,6 @@
 		this.lastName = lastName;
 	}
 	
-		var menu1 = global_menus.getMenuFromId("menu1");
-		
-		//Static menu test
-		var args = {
-			id: "my_menu",
-			items: [
-				"Item 1",
-				"Item 2",
-				"Item 3",
-				"Item 4",
-			],
-			descriptions: [
-				"Desc1",
-				"Desc2",
-				"Desc3",
-				"Desc4",
-			],
-			title: "My Awesome Menu",
-			openWith: "51",
-			onEnter: function(){
-				console.log(this.getSelectedText());
-				return;
-			}
-		};
-		new StaticMenu(args);
-		//
-		//Dynamic Menu Test
 		people = [];
 		people.push(new Person("Drew", "Pereli"));
 		people.push(new Person("John", "Smith"));
@@ -81,8 +54,9 @@
 				var person = people[this.getSelectedIndex()];
 				console.log(person.firstName);
 			},
+			wrap: true,
 		};
-		var people_menu = new DynamicMenu(args);
+		var people_menu = new Menu(args);
 </script>
 
 
