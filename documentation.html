@@ -46,9 +46,12 @@
 			},
 			title: "Menu Title", //OPTIONAL
 			openWith: keyCode, //OPTIONAL
+			width: 40, //OPTIONAL
+			height: 40, //OPTIONAL
 			onEnter: function(){ //OPTIONAL
 				//This will be called when the user hits the enter key with this menu open.
 			}
+			wrap: true, //OPTIONAL
 		};
 		new Menu(arguments);
 	</pre>
@@ -56,7 +59,13 @@
 		Instead of supplying the menu item text directly in the arguments, you supply a reference to an array of objects. You're probably wondering where the text of the menu item comes from. It comes from a the required argument "getItemText". This argument is a method that that takes an object as an argument, and returns the text that should be displayed on the menu item representing that object. When the menu is being generated or updated, the menu controller will iterate through each item in the items array and feed the item into "getItemText" to determine what text should be used.
 	</p>
 	<p>
+		The "title" attribute determines the title of the menu. This will be displayed as a header above the menu items.
+	</p>
+	<p>
 		The "open-with" attribute is optional. You can set it to the <a href="http://keycode.info/">keycode</a> of the key you would like to be able to open the menu with. The only keycodes you cannot use are 27 (escape key), 38 (up arrow), and 40 (down arrow).
+	</p>
+	<p>
+		The width and height attributes correspond to the size of the menu as a percent of the page width and height respectively. They both must be even numbers less than or equal to 100. If left blank, they will revert to default values. The default width is 50%, and the default height is "as big as it needs to be but not too big".
 	</p>
 	<p>
 		To have the menu do something when you hit enter, you can set the "onEnter" property of the arguments array to the function you would like to execute to be executed. You can access the index of the selected item with the 
@@ -64,10 +73,11 @@
 		<span class="javascript">this.getSelectedText()</span> method. 
 	</p>
 	<p>
-		The optional "size" argument sets the size of the menu. It can be one of five options: "hg", "lg", "md", "sm", "xs" (huge, large, medium, small, extra small). All menus are "md" by default.
+		The "wrap" attribute has to do with the behavior of item selection. It can be either true or false. If true, the menu "wraps", meaning that if the last item is selected and the user hits the down arrow, the top item will be selected, and if the top item is selected and the user hits up, the bottom item will be selected. If false, nothing will happen in these scenarios. If unspecified, the menu will wrap by default.
 	</p>
+	<h2>A Concrete Example</h2>
 	<p>
-		For example, let's say you had an array of "person" objects called "people". Each "person" has multiple properties associated with it, such as "firstName", "lastName", "email", etc. Let's say you want to set up a menu where each person in the array is represented by a menu item, and you want the text of each menu item to be the corresponding person's first name followed by a space followed by their last name. And let's say you wanted the description to display the person's full name as a header, with the word "email" followed by their email address bellow. And let's say you want to write the selected person's first name to the console when you hit the enter key. You might set up something like this:
+		Let's say you had an array of "person" objects called "people". Each "person" has multiple properties associated with it, such as "firstName", "lastName", "email", etc. Let's say you want to set up a menu where each person in the array is represented by a menu item, and you want the text of each menu item to be the corresponding person's first name followed by a space followed by their last name. And let's say you wanted the description to display the person's full name as a header, with the word "email" followed by their email address bellow. And let's say you want to write the selected person's first name to the console when you hit the enter key. You might set up something like this:
 	</p>
 	<pre>
 		function Person(firstName, lastName, email)

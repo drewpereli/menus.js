@@ -51,18 +51,21 @@ Menu.prototype.createTitleElement = function(title)
 }
 
 
-Menu.prototype.createItemContainerElement = function()
+Menu.prototype.createItemContainerElement = function(position)
 {
-	var itemContainer = $("<div class=\"menu-item-container\"></div>")[0];
+	var positionClass = `item-container-${position}`;
+	var itemContainer = $(`<div class="menu-item-container ${positionClass}"></div>`)[0];
 	if (this.descriptions)
 		$(itemContainer).addClass("description-menu-item-container");
 	$(itemContainer).appendTo(this.html.menu);
 }
 
 
-Menu.prototype.createDescriptionContainerElement = function()
+Menu.prototype.createDescriptionContainerElement = function(position)
 {
-	$("<div class=\"menu-item-description-container\"></div>").appendTo(this.html.menu);
+	console.log("stuff");
+	var positionClass = `description-container-${position}`;
+	$(`<div class="menu-item-description-container ${positionClass}"></div>`).appendTo(this.html.menu);
 }
 
 
@@ -134,7 +137,9 @@ Menu.prototype.initialize = function(args)
 	var onEnter = false;
 	var width = 50;
 	var height = "FIT";
-	var wrap = false;
+	var wrap = true;
+	var descriptionPosition = false;
+	var itemPosition = "FULL";
 	if (typeof args.title !== "undefined")
 		title = args.title;
 	if (typeof args.openWith !== "undefined")
@@ -154,6 +159,7 @@ Menu.prototype.initialize = function(args)
 		{
 			this.descriptions = true;
 			this.getDescriptionText = args.getDescriptionText;
+			descriptionPosition = "RIGHT";
 		}
 	}
 	if (typeof args.onEnter !== "undefined")
@@ -201,14 +207,42 @@ Menu.prototype.initialize = function(args)
 			wrap = args.wrap;
 		}
 	}
+	if (typeof args.descriptionPosition !== "undefined")
+	{
+		if (this.descriptions === false)
+		{
+			console.log("You must have a valid 'description' argument to define a 'descriptionPosition' argument.");
+		}
+		else
+		{
+			var acceptablePositions = ["RIGHT", "BOTTOM", "LEFT", "TOP"];
+			if (acceptablePositions.indexOf(args.descriptionPosition) === -1)
+			{
+				console.log("The 'descriptionPosition' property must be one of these options: " + acceptablePositions);
+			}
+			else
+			{
+				descriptionPosition = args.descriptionPosition;
+			}
+			//Set menu item position 
+			if (descriptionPosition === "RIGHT")
+				itemPosition = "LEFT";
+			else if (descriptionPosition === "BOTTOM")
+				itemPosition = "TOP";
+			else if (descriptionPosition === "LEFT")
+				itemPosition = "RIGHT";
+			else if (descriptionPosition === "TOP")
+				itemPosition = "BOTTOM";
+		}
+	}
 	this.createMenuElement(id, width, height);
 	if (title)
 		this.createTitleElement(title);
-	this.createItemContainerElement();
-	if (this.descriptions)
-	{
-		this.createDescriptionContainerElement();
-	}
+	if (this.descriptions && (descriptionPosition === "TOP" || descriptionPosition === "LEFT" ))
+		this.createDescriptionContainerElement(descriptionPosition);
+	this.createItemContainerElement(itemPosition);
+	if (this.descriptions && (descriptionPosition === "BOTTOM" || descriptionPosition === "RIGHT" ))
+		this.createDescriptionContainerElement(descriptionPosition);
 	if (wrap)
 		this.wrap = wrap;
 	global_menus.menus.push(this);
