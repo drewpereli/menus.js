@@ -29,10 +29,16 @@ Menu.prototype.getSelectedIndex = function(){return this.selectedIndex;}
 Menu.prototype.getSelectedText = function(){return this.html.items[this.selectedIndex].innerHTML;}
 
 
-Menu.prototype.createMenuElement = function(id, size)
+Menu.prototype.createMenuElement = function(id, width, height)
 {
-	var menu = $("<div id=\"" + id + "\" class=\"menu menu-hide\"></div>")[0];
-	$(menu).addClass("menu-" + size);
+	var sideMargin = (100 - width) / 2;
+	var topMargin = height === "FIT" ? 10 : (100 - height) / 2;
+	if (height === "FIT")
+		height = "";
+	var menu = $(`<div id="${id}" class="menu menu-hide"
+		style="width:${width}%; margin-left:${sideMargin}%; margin-right:${sideMargin}%;
+				height:${height}%; top:${topMargin}%;"
+		></div>`)[0];
 	this.html.menu = menu;
 	//Append to the menu contain
 	$(menu).appendTo("#menu-container");
@@ -126,7 +132,9 @@ Menu.prototype.initialize = function(args)
 	var openWith = false;
 	var descriptions = false;
 	var onEnter = false;
-	var size = "md";
+	var width = 50;
+	var height = "FIT";
+	var style = "";
 	var wrap = false;
 	if (typeof args.title !== "undefined")
 		title = args.title;
@@ -161,16 +169,26 @@ Menu.prototype.initialize = function(args)
 			console.log("The 'onEnter' property must be a function.");
 		}
 	}
-	if (typeof args.size !== "undefined")
+	if (typeof args.width !== "undefined")
 	{
-		var acceptableSizes = ["hg", "lg", "md", "sm", "xs"];
-		if (acceptableSizes.indexOf(args.size) === -1)
+		if (args.width % 2 !== 0 || args.width > 100)
 		{
-			console.log("The 'size' property must be set to one of these options: " + acceptableSizes);
+			console.log("The 'width' property must be an even number less than or equal to 100.");
 		}
 		else
 		{
-			size = args.size;
+			width = args.width;
+		}
+	}
+	if (typeof args.height !== "undefined")
+	{
+		if (args.height % 2 !== 0 || args.height > 100)
+		{
+			console.log("The 'height' property must be an even number less than or equal to 100.");
+		}
+		else
+		{
+			height = args.height;
 		}
 	}
 	if (typeof args.wrap !== "undefined")
@@ -184,7 +202,7 @@ Menu.prototype.initialize = function(args)
 			wrap = args.wrap;
 		}
 	}
-	this.createMenuElement(id, size);
+	this.createMenuElement(id, width, height);
 	if (title)
 		this.createTitleElement(title);
 	this.createItemContainerElement();
