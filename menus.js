@@ -134,7 +134,6 @@ Menu.prototype.initialize = function(args)
 	var onEnter = false;
 	var width = 50;
 	var height = "FIT";
-	var style = "";
 	var wrap = false;
 	if (typeof args.title !== "undefined")
 		title = args.title;
