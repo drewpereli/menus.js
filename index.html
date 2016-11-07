@@ -34,6 +34,10 @@
 		people.push(new Person("Drew", "Pereli"));
 		people.push(new Person("John", "Smith"));
 		people.push(new Person("Steve", "Jones"));
+		for (var i = 0 ; i < 20 ; i++)
+		{
+			people.push(new Person("Drew", "Pereli"));	
+		}
 
 		var args = {
 			id: "people_menu",
@@ -44,7 +48,8 @@
 			},
 			getDescriptionText: function(item)
 			{
-				var description = `<h1>${item.firstName} ${item.lastName}</h1>`;
+				var description = `<h1>${item.firstName} ${item.lastName}</h1>
+									<div>This person has a name and it's ${item.firstName} ${item.lastName}</div>`;
 				return description;
 			},
 			title: "People",

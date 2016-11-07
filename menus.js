@@ -12,6 +12,8 @@ function Menu()
 	this.getItemText;
 	this.getDescriptionText;
 	this.wrap = false;
+	this.topItemDisplayed = 0; //Index of the item being displayed at the top of the menu (higher than 0 if the meny is scrolled down)
+	this.maxItemsDisplayed = "NONE"; //Maximum number of items displayed (if lower than total number of items in the menu, menu will scroll)
 	this.html = 
 	{
 		menu: false,
@@ -63,7 +65,6 @@ Menu.prototype.createItemContainerElement = function(position)
 
 Menu.prototype.createDescriptionContainerElement = function(position)
 {
-	console.log("stuff");
 	var positionClass = `description-container-${position}`;
 	$(`<div class="menu-item-description-container ${positionClass}"></div>`).appendTo(this.html.menu);
 }
@@ -360,6 +361,7 @@ global_menus.close = function()
 	$(".menu-show").removeClass("menu-show").addClass("menu-hide");
 	this.openMenu = false;
 }
+
 
 
 global_menus.selectIndex = function(index)
