@@ -3,7 +3,7 @@ function Menu()
 {
 	this.parentMenu = false;
 	this.childMenu = false;
-	this.open = false; //true only if it's the current menu being looked at
+	//this.open = false; //true only if it's the current menu being looked at
 	this.descriptions = false; //True only if at least one menu item comes with a description
 	this.onEnter = function(){};
 	this.selectedIndex = 0;
@@ -311,13 +311,12 @@ global_menus.initialize = function()
 	$("<div id=\"menu-container\"></div>").appendTo(document.body);
 	//Add the enter key event listener
 	$(document).keydown(function(e){
-		console.log(e.key);
 		//If a key pressed toggles a menu
 		if (global_menus.toggleKeys.indexOf(e.key) !== -1)
 		{
 			var index = global_menus.toggleKeys.indexOf(e.key);
 			var menuToToggle = global_menus.menus[index];
-			global_menus.toggle(menuToToggle.html.menu.id);
+			menuToToggle.toggle();
 		}
 		if (e.which === 13) //If it's the enter key
 		{
@@ -327,52 +326,44 @@ global_menus.initialize = function()
 				global_menus.openMenu.onEnter();
 			}
 		}
-		else if (e.which === 27) //If it's the escape key
-			global_menus.close();
-		else if (e.which === 38) // If it's the up key
+		else if (global_menus.openMenu)
 		{
-			if (global_menus.openMenu)
-			{
-				global_menus.selectUp();
-			}
-		}
-		else if (e.which === 40) //If it's the down key
-		{
-			if (global_menus.openMenu)
-			{
-				global_menus.selectDown();
-			}
+			if (e.which === 27) //If it's the escape key
+				global_menus.openMenu.close();
+			else if (e.which === 38) // If it's the up key
+				global_menus.openMenu.selectUp();
+			else if (e.which === 40) //If it's the down key
+				global_menus.openMenu.selectDown();
 		}
 	});
 }
 
 
 //Opens or closes the menu. Only opens it if there isn't another menu open. 
-global_menus.toggle = function(menuId)
+Menu.prototype.toggle = function()
 {
-	var menu = this.getMenu(menuId);
-	if (this.openMenu === menu)
+	if (global_menus.openMenu === this)
 		this.close();
-	else if (this.openMenu === false)
-		this.open(menuId);
+	else if (global_menus.openMenu === false)
+		this.open();
 }
 
-global_menus.open = function(menuId)
+Menu.prototype.open = function()
 {
-	//Hide the currently shown menu, if there is one.
-	$(".menu-show").removeClass("menu-show").addClass("menu-hide");
-	var menuToShow = $("#" + menuId);
-	this.openMenu = this.getMenuFromId(menuId);
-	this.openMenu.update();
+	//Hide the currently shown menu, if there is one. MIGHT BE UNNECESSARY
+	//$(".menu-show").removeClass("menu-show").addClass("menu-hide");
+	var menuToShow = this.html.menu;
+	global_menus.openMenu = this;
+	this.update();
 	$(menuToShow).removeClass("menu-hide").addClass("menu-show");
 }
 
 
 //Closes whatever menu is open
-global_menus.close = function()
+Menu.prototype.close = function()
 {
-	$(".menu-show").removeClass("menu-show").addClass("menu-hide");
-	this.openMenu = false;
+	$(this.html.menu).removeClass("menu-show").addClass("menu-hide");
+	global_menus.openMenu = false;
 }
 
 
@@ -427,14 +418,14 @@ global_menus.selectIndex = function(index)
 
 
 
-global_menus.selectUp = function()
+Menu.prototype.selectUp = function()
 {
 	var newIndex;
-	if (this.openMenu.selectedIndex === 0)
+	if (this.selectedIndex === 0)
 	{
-		if (this.openMenu.wrap)
+		if (this.wrap)
 		{
-			newIndex = this.openMenu.html.items.length - 1;
+			newIndex = this.html.items.length - 1;
 		}
 		else
 		{
@@ -443,7 +434,7 @@ global_menus.selectUp = function()
 	}
 	else
 	{
-		newIndex = this.openMenu.selectedIndex - 1;
+		newIndex = this.selectedIndex - 1;
 	}
 	this.selectIndex(newIndex);
 }
@@ -451,12 +442,12 @@ global_menus.selectUp = function()
 
 
 
-global_menus.selectDown = function()
+Menu.prototype.selectDown = function()
 {
 	var newIndex;
-	if (this.openMenu.selectedIndex === this.openMenu.html.items.length - 1)
+	if (this.selectedIndex === this.html.items.length - 1)
 	{
-		if (this.openMenu.wrap)
+		if (this.wrap)
 		{
 			newIndex = 0
 		}
@@ -467,7 +458,7 @@ global_menus.selectDown = function()
 	}
 	else
 	{
-		newIndex = this.openMenu.selectedIndex + 1;
+		newIndex = this.selectedIndex + 1;
 	}
 	this.selectIndex(newIndex);
 }
