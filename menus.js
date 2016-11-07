@@ -250,7 +250,7 @@ Menu.prototype.initialize = function(args)
 	if (wrap)
 		this.wrap = wrap;
 	if (openWith !== false && openWith !== 27)
-		global_menus.toggleKeyCodes.push(openWith);
+		global_menus.toggleKeys.push("" + openWith);
 }
 
 
@@ -300,7 +300,7 @@ var global_menus =
 {
 	openMenu: false,
 	menus: [],
-	toggleKeyCodes: [], //The key codes of the buttons that open the menu
+	toggleKeys: [], //The key codes of the buttons that open the menu
 };
 
 
@@ -313,9 +313,9 @@ global_menus.initialize = function()
 	$(document).keydown(function(e){
 		console.log(e.key);
 		//If a key pressed toggles a menu
-		if (global_menus.toggleKeyCodes.indexOf(e.which) !== -1)
+		if (global_menus.toggleKeys.indexOf(e.key) !== -1)
 		{
-			var index = global_menus.toggleKeyCodes.indexOf(e.which);
+			var index = global_menus.toggleKeys.indexOf(e.key);
 			var menuToToggle = global_menus.menus[index];
 			global_menus.toggle(menuToToggle.html.menu.id);
 		}
@@ -330,9 +330,19 @@ global_menus.initialize = function()
 		else if (e.which === 27) //If it's the escape key
 			global_menus.close();
 		else if (e.which === 38) // If it's the up key
-			global_menus.selectUp();
+		{
+			if (global_menus.openMenu)
+			{
+				global_menus.selectUp();
+			}
+		}
 		else if (e.which === 40) //If it's the down key
-			global_menus.selectDown();
+		{
+			if (global_menus.openMenu)
+			{
+				global_menus.selectDown();
+			}
+		}
 	});
 }
 
