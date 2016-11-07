@@ -75,6 +75,10 @@ Menu.prototype.addItem = function(itemText)
 	var item = $(`<div class="menu-item">${itemText}</div>`)[0];
 	if (this.html.items.length === this.selectedIndex)
 		$(item).addClass("menu-item-selected");
+	var itemOutOfDisplayRange = this.html.items.length < this.topItemDisplayed
+								|| this.html.items.length >= this.topItemDisplayed + this.maxItemsDisplayed;
+	if (itemOutOfDisplayRange)
+		$(item).addClass("menu-item-hidden");
 	$(item).appendTo($(this.html.menu).find(".menu-item-container"));
 	this.html.items.push(item);
 }
@@ -90,6 +94,7 @@ Menu.prototype.addDescription = function(descriptionText)
 }
 
 
+//Makes sure the arguments passed into the menu initializer are valid
 Menu.prototype.validArguments = function(args)
 {
 	if (typeof args.items === "undefined")
@@ -138,6 +143,7 @@ Menu.prototype.initialize = function(args)
 	var onEnter = false;
 	var width = 50;
 	var height = "FIT";
+	var maxItemsDisplayed = "NONE";
 	var wrap = true;
 	var descriptionPosition = false;
 	var itemPosition = "FULL";
@@ -197,6 +203,17 @@ Menu.prototype.initialize = function(args)
 			height = args.height;
 		}
 	}
+	if (typeof args.maxItemsDisplayed !== "undefined")
+	{
+		if (typeof args.maxItemsDisplayed !== "number")
+		{
+			console.log("The 'maxItemsDisplayed' property must be a number.")
+		}
+		else
+		{
+			maxItemsDisplayed = args.maxItemsDisplayed;
+		}
+	}
 	if (typeof args.wrap !== "undefined")
 	{
 		if (typeof args.wrap !== "boolean")
@@ -237,6 +254,8 @@ Menu.prototype.initialize = function(args)
 		}
 	}
 	this.createMenuElement(id, width, height);
+	this.maxItemsDisplayed = maxItemsDisplayed;
+	global_menus.menus.push(this);
 	if (title)
 		this.createTitleElement(title);
 	if (this.descriptions && (descriptionPosition === "TOP" || descriptionPosition === "LEFT" ))
@@ -246,7 +265,6 @@ Menu.prototype.initialize = function(args)
 		this.createDescriptionContainerElement(descriptionPosition);
 	if (wrap)
 		this.wrap = wrap;
-	global_menus.menus.push(this);
 	if (openWith !== false && openWith !== 27)
 		global_menus.toggleKeyCodes.push(openWith);
 }
@@ -376,36 +394,43 @@ global_menus.selectIndex = function(index)
 	$(this.openMenu.html.items[index]).addClass("menu-item-selected");
 	if (this.openMenu.descriptions)
 		$(this.openMenu.html.descriptions[index]).removeClass("menu-item-description-hidden");
-}
 
-
-/*
-global_menus.selectUp = function()
-{
-	var selectedIndex;
-	var oldIndex;
-	var succesfulSelect = true; //The new item will only be selected if the select was valid
-	$(this.openMenu.html.items).each(function(index, item)
+	//Scroll the menu if need be
+	//If the index is out of view
+	var openMenu = this.openMenu;
+	var itemOutOfView = index < openMenu.topItemDisplayed || index >= openMenu.topItemDisplayed + openMenu.maxItemsDisplayed;
+	//	If the new index is too high
+	if (itemOutOfView)
 	{
-		if ($(item).hasClass("menu-item-selected"))
+		var newTopItemDisplayed;
+		if (index < openMenu.topItemDisplayed)
+			newTopItemDisplayed = index;	
+		else if (index >= openMenu.topItemDisplayed + openMenu.maxItemsDisplayed)
+			newTopItemDisplayed = index - openMenu.maxItemsDisplayed + 1;
+		for (var i = openMenu.topItemDisplayed ; i < openMenu.topItemDisplayed + openMenu.maxItemsDisplayed ; i++)
 		{
-			selectedIndex = index - 1;
-			return false;
+			if (i < newTopItemDisplayed || i >= newTopItemDisplayed + openMenu.maxItemsDisplayed)
+			{
+				var item = openMenu.html.items[i];
+				$(item).addClass("menu-item-hidden");
+			}
 		}
-	});
-	if (selectedIndex >= 0) //As long as the previously selected item isn't the last item
-	{
-		$(this.openMenu.html.items[selectedIndex + 1]).removeClass("menu-item-selected");
-		$(this.openMenu.html.items[selectedIndex]).addClass("menu-item-selected");
-		this.openMenu.selectedIndex = selectedIndex;
-		if (this.openMenu.descriptions)
+		//Change index through index + maxItemsDisplayed to visible
+		for (var i = newTopItemDisplayed ; i < newTopItemDisplayed + openMenu.maxItemsDisplayed ; i++)
 		{
-			$(this.openMenu.html.descriptions[selectedIndex + 1]).addClass("menu-item-description-hidden");
-			$(this.openMenu.html.descriptions[selectedIndex]).removeClass("menu-item-description-hidden");
+			//If it's not within the old display range, remove the "hidden" class
+			if (i < openMenu.topItemDisplayed || i >= openMenu.topItemDisplayed + openMenu.maxItemsDisplayed)
+			{
+				var item = openMenu.html.items[i];
+				$(item).removeClass("menu-item-hidden");
+			}
 		}
+		openMenu.topItemDisplayed = newTopItemDisplayed;
 	}
 }
-*/
+
+
+
 
 global_menus.selectUp = function()
 {
@@ -428,31 +453,7 @@ global_menus.selectUp = function()
 	this.selectIndex(newIndex);
 }
 
-/*
-global_menus.selectDown = function()
-{
-	var selectedIndex;
-	$(this.openMenu.html.items).each(function(index, item)
-	{
-		if ($(item).hasClass("menu-item-selected"))
-		{
-			selectedIndex = index + 1;
-			return false;
-		}
-	});
-	if (selectedIndex < this.openMenu.html.items.length) //As long as the previously selected item isn't the first item
-	{
-		$(this.openMenu.html.items[selectedIndex - 1]).removeClass("menu-item-selected");
-		$(this.openMenu.html.items[selectedIndex]).addClass("menu-item-selected");
-		this.openMenu.selectedIndex = selectedIndex;
-		if (this.openMenu.descriptions)
-		{
-			$(this.openMenu.html.descriptions[selectedIndex - 1]).addClass("menu-item-description-hidden");
-			$(this.openMenu.html.descriptions[selectedIndex]).removeClass("menu-item-description-hidden");
-		}
-	}
-}
-*/
+
 
 
 global_menus.selectDown = function()

@@ -81,6 +81,10 @@ MENU ITEM STUFF
 }
 
 
+.menu-item-hidden
+{
+	display: none;
+}
 
 
 .menu-item-description-hidden
