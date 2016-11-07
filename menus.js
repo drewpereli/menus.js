@@ -31,15 +31,11 @@ Menu.prototype.getSelectedIndex = function(){return this.selectedIndex;}
 Menu.prototype.getSelectedText = function(){return this.html.items[this.selectedIndex].innerHTML;}
 
 
-Menu.prototype.createMenuElement = function(id, width, height)
+Menu.prototype.createMenuElement = function(id, width)
 {
 	var sideMargin = (100 - width) / 2;
-	var topMargin = height === "FIT" ? 10 : (100 - height) / 2;
-	if (height === "FIT")
-		height = "";
 	var menu = $(`<div id="${id}" class="menu menu-hide"
-		style="width:${width}%; margin-left:${sideMargin}%; margin-right:${sideMargin}%;
-				height:${height}%; top:${topMargin}%;"
+		style="width:${width}%; margin-left:${sideMargin}%; margin-right:${sideMargin}%;"
 		></div>`)[0];
 	this.html.menu = menu;
 	//Append to the menu contain
@@ -142,7 +138,6 @@ Menu.prototype.initialize = function(args)
 	var descriptions = false;
 	var onEnter = false;
 	var width = 50;
-	var height = "FIT";
 	var maxItemsDisplayed = "NONE";
 	var wrap = true;
 	var descriptionPosition = false;
@@ -190,17 +185,6 @@ Menu.prototype.initialize = function(args)
 		else
 		{
 			width = args.width;
-		}
-	}
-	if (typeof args.height !== "undefined")
-	{
-		if (args.height % 2 !== 0 || args.height > 100)
-		{
-			console.log("The 'height' property must be an even number less than or equal to 100.");
-		}
-		else
-		{
-			height = args.height;
 		}
 	}
 	if (typeof args.maxItemsDisplayed !== "undefined")
@@ -253,7 +237,7 @@ Menu.prototype.initialize = function(args)
 				itemPosition = "BOTTOM";
 		}
 	}
-	this.createMenuElement(id, width, height);
+	this.createMenuElement(id, width);
 	this.maxItemsDisplayed = maxItemsDisplayed;
 	global_menus.menus.push(this);
 	if (title)
@@ -327,6 +311,7 @@ global_menus.initialize = function()
 	$("<div id=\"menu-container\"></div>").appendTo(document.body);
 	//Add the enter key event listener
 	$(document).keydown(function(e){
+		console.log(e.key);
 		//If a key pressed toggles a menu
 		if (global_menus.toggleKeyCodes.indexOf(e.which) !== -1)
 		{

@@ -21,6 +21,7 @@ MENU STUFF
 .menu
 {
 	margin: 0px;
+	margin-top: 2em;
 	position: absolute;
 	border: 2px solid #111;
 	border-radius: 5px;
