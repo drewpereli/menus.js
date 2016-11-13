@@ -368,22 +368,22 @@ Menu.prototype.close = function()
 
 
 
-global_menus.selectIndex = function(index)
+Menu.prototype.selectIndex = function(index)
 {
 
-	if (index >= this.openMenu.html.items.length)
+	if (index >= this.html.items.length)
 		return false;
-	$(this.openMenu.html.items[this.openMenu.selectedIndex]).removeClass("menu-item-selected");
-	if (this.openMenu.descriptions)
-		$(this.openMenu.html.descriptions[this.openMenu.selectedIndex]).addClass("menu-item-description-hidden");
-	this.openMenu.selectedIndex = index;
-	$(this.openMenu.html.items[index]).addClass("menu-item-selected");
-	if (this.openMenu.descriptions)
-		$(this.openMenu.html.descriptions[index]).removeClass("menu-item-description-hidden");
+	$(this.html.items[this.selectedIndex]).removeClass("menu-item-selected");
+	if (this.descriptions)
+		$(this.html.descriptions[this.selectedIndex]).addClass("menu-item-description-hidden");
+	this.selectedIndex = index;
+	$(this.html.items[index]).addClass("menu-item-selected");
+	if (this.descriptions)
+		$(this.html.descriptions[index]).removeClass("menu-item-description-hidden");
 
 	//Scroll the menu if need be
 	//If the index is out of view
-	var openMenu = this.openMenu;
+	var openMenu = this;
 	var itemOutOfView = index < openMenu.topItemDisplayed || index >= openMenu.topItemDisplayed + openMenu.maxItemsDisplayed;
 	//	If the new index is too high
 	if (itemOutOfView)

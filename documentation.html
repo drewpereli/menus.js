@@ -47,14 +47,17 @@
 			title: "Menu Title", //OPTIONAL
 			openWith: keyCode, //OPTIONAL
 			width: 40, //OPTIONAL
-			height: 40, //OPTIONAL
+			maxItemsDisplayed: 10, //OPTIONAL
+			wrap: true, //OPTIONAL
 			onEnter: function(){ //OPTIONAL
 				//This will be called when the user hits the enter key with this menu open.
 			}
-			wrap: true, //OPTIONAL
 		};
 		new Menu(arguments);
 	</pre>
+	<h3>Attributes</h3>
+	<p><b>id:</b> A unique menu id assigned to the corresponding menu html element.
+	</p>
 	<p>
 		Instead of supplying the menu item text directly in the arguments, you supply a reference to an array of objects. You're probably wondering where the text of the menu item comes from. It comes from a the required argument "getItemText". This argument is a method that that takes an object as an argument, and returns the text that should be displayed on the menu item representing that object. When the menu is being generated or updated, the menu controller will iterate through each item in the items array and feed the item into "getItemText" to determine what text should be used.
 	</p>
