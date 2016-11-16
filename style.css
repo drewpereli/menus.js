@@ -16,10 +16,6 @@ MENU STUFF
 	padding-bottom: 1em;
 }
 
-.menu-hide
-{
-	display: none;
-}
 
 
 /*
@@ -153,6 +149,7 @@ MENU CONTAINER
 }
 
 
+/*Menu stuff*/
 .menu
 {
 	margin-left: 0px;
@@ -161,6 +158,10 @@ MENU CONTAINER
 	position: absolute;
 }
 
+.menu-hide
+{
+	display: none;
+}
 
 
 
