@@ -1,16 +1,12 @@
 
 <html>
 <head>
+	<!--
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-	<!-- Optional theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+	-->
 	<style>
 		body
 		{
@@ -49,35 +45,35 @@
 			width: 40, //OPTIONAL
 			maxItemsDisplayed: 10, //OPTIONAL
 			wrap: true, //OPTIONAL
-			onEnter: function(){ //OPTIONAL
+			onEnter: function(selectedItem){ //OPTIONAL
 				//This will be called when the user hits the enter key with this menu open.
 			}
 		};
+
 		new Menu(arguments);
 	</pre>
-	<h3>Attributes</h3>
+	<h3>Arguments</h3>
 	<p><b>id:</b> A unique menu id assigned to the corresponding menu html element.
 	</p>
-	<p>
-		Instead of supplying the menu item text directly in the arguments, you supply a reference to an array of objects. You're probably wondering where the text of the menu item comes from. It comes from a the required argument "getItemText". This argument is a method that that takes an object as an argument, and returns the text that should be displayed on the menu item representing that object. When the menu is being generated or updated, the menu controller will iterate through each item in the items array and feed the item into "getItemText" to determine what text should be used.
+	<p><b>items:</b> An array containing the menu items, or the objects that will be used to generate the menu item data.
 	</p>
-	<p>
-		The "title" attribute determines the title of the menu. This will be displayed as a header above the menu items.
+	<p><b>getItemText:</b> A method that that takes a menu item (from the aformentioned "items" array) as an argument, and returns the text that should be displayed for the menu item corresponding to that object. When the menu is being generated or updated, the menu controller will iterate through each item in the items array and feed the item into this method to determine what text should be used.
 	</p>
-	<p>
-		The "open-with" attribute is an optional string paramater. You can set it to the of the key you would like to be able to open the menu with. So if you would like the menu to be opened with the "a" key, set the attribute to "a". The only keys you cannot use are "Escape", "ArrowUp", and "ArrowDown".
+	<p><b>getDescriptionText:</b> This method operates very similarly to getItemText. Just like getItemText, this method is fed an item from the "items" array. Instead of outputting the corresponding menu item text, it outputs the corresponding description text for that item. This is an optional argument. If it is not included in the arguments array, the menu will not be displayed with a description box. 
 	</p>
-	<p>
-		The width and height attributes correspond to the size of the menu as a percent of the page width and height respectively. They both must be even numbers less than or equal to 100. If left blank, they will revert to default values. The default width is 50%, and the default height is "as big as it needs to be but not too big".
+	<p><b>title:</b> Determines the titleof the menu. This will be displayed as a header above the menu items.
 	</p>
-	<p>
-		To have the menu do something when you hit enter, you can set the "onEnter" property of the arguments array to the function you would like to execute to be executed. You can access the index of the selected item with the 
-		<span class="javascript">this.getSelectedIndex()</span> method. You can get the text of the selected menu item with the 
-		<span class="javascript">this.getSelectedText()</span> method. 
+	<p><b>openWith:</b> The key you would like to be able to open and close the menu with. So if you would like the menu to be opened with the "a" key, set the attribute to "a". The only keys you cannot use here are "Escape", "ArrowUp", and "ArrowDown".
 	</p>
-	<p>
-		The "wrap" attribute has to do with the behavior of item selection. It can be either true or false. If true, the menu "wraps", meaning that if the last item is selected and the user hits the down arrow, the top item will be selected, and if the top item is selected and the user hits up, the bottom item will be selected. If false, nothing will happen in these scenarios. If unspecified, the menu will wrap by default.
+	<p><b>width:</b> Corresponds to the width of the menu as a percent of the page width. It must be an even number less than or equal to 100. If the argument is not included in the arguments array, the width of the menu will be 50%.
 	</p>
+	<p><b>maxItemsDisplayed:</b> The maximum numbers of menu items displayed at one time. If set to a number less than the total number of menu items, the menu items will scroll. If not set, all the menu items will be displayed on the page at the same time. 
+	</p>
+	<p><b>wrap:</b> Determines whether menu selection wraps or not. If set to true, when the last menu item is selected and the user hits the down arrow, the top menu item will be selected. Additionally, when the top menu item is selected and the user hits the up arrow, the last menu item will be selected. If set to false, nothing will happen in these scenarios. If not set, the menu will wrap. 
+	</p>
+	<p><b>onEnter:</b> A function that will be executed when the menu is open and the user hits the enter key. The currently selected item (from the "items" array that you fed into the arguments array) will be fed into this method. 
+	</p>
+	
 	<h2>A Concrete Example</h2>
 	<p>
 		Let's say you had an array of "person" objects called "people". Each "person" has multiple properties associated with it, such as "firstName", "lastName", "email", etc. Let's say you want to set up a menu where each person in the array is represented by a menu item, and you want the text of each menu item to be the corresponding person's first name followed by a space followed by their last name. And let's say you wanted the description to display the person's full name as a header, with the word "email" followed by their email address bellow. And let's say you want to write the selected person's first name to the console when you hit the enter key. You might set up something like this:
@@ -102,9 +98,9 @@
 				descriptionText += "&lt;div&gt;Email: " + item.email + "&lt;\div&gt;";
 				return descriptionText;
 			},
-			onEnter: function()
+			onEnter: function(selectedPerson)
 			{
-				var selectedPerson = people[this.getSelectedIndex()];
+				
 				console.log(selectedPerson.firstName);
 			}
 		};
@@ -128,13 +124,16 @@
 	</p>
 	<h3>Opening and Closing a Menu</h3>
 	<p>
-		There are two ways to open or close a menu. If you set the "keycode" argument when creating the menu, simply press the key corresponding to that keycode to open or close the menu. If you didn't set that argument, you can call the function <span class="javascript">global_menus.toggle(MENU_ID)"</span> to open or close your menu.
-		You can only have one menu open at a time. If you try to open a menu while another menu is open, nothing will happen.
+		There are two ways to open or close a menu. If you set the "openWith" argument when creating the menu, simply press the key corresponding to that keycode to open or close the menu. If you didn't set that argument, you can call the function <span class="javascript">global_menus.toggle(MENU_ID)"</span> to open or close your menu.
+		You can only have one menu open at a time. If you try to open a menu while another menu is open, nothing will happen. The escape key also closes whatever menu you have open. 
 	</p>
 	<h3>Selecting Items in a Menu</h3>
 	<p>
 		By default, the first item in a menu is selected. To select a different item, use the up and down arrow keys.
 	</p>
+
+	<h2>Styling a Menu</h2>
+	
 </body>
 </html>
 

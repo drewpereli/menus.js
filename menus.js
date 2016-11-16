@@ -5,7 +5,7 @@ function Menu()
 	this.childMenu = false;
 	//this.open = false; //true only if it's the current menu being looked at
 	this.descriptions = false; //True only if at least one menu item comes with a description
-	this.onEnter = function(){};
+	this.onEnter = false;
 	this.selectedIndex = 0;
 	this.type = "MENU";
 	this.itemArray;
@@ -168,8 +168,8 @@ Menu.prototype.initialize = function(args)
 	{
 		if (typeof args.onEnter === "function")
 		{
-			onEnter = true;
-			this.onEnter = args.onEnter;
+			onEnter = args.onEnter
+			this.onEnter = onEnter;
 		}
 		else
 		{
@@ -320,10 +320,11 @@ global_menus.initialize = function()
 		}
 		if (e.which === 13) //If it's the enter key
 		{
+			var openMenu = global_menus.openMenu;
 			//Active the "on enter" function for the open menu, if there is one. 
-			if (global_menus.openMenu)
+			if (openMenu && openMenu.onEnter !== false)
 			{
-				global_menus.openMenu.onEnter();
+				openMenu.onEnter(openMenu.itemArray[openMenu.selectedIndex]);
 			}
 		}
 		else if (global_menus.openMenu)

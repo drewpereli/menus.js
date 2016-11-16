@@ -52,8 +52,7 @@
 			},
 			title: "People",
 			openWith: "1",
-			onEnter: function(){
-				var person = people[this.getSelectedIndex()];
+			onEnter: function(person){
 				console.log(person.firstName);
 			},
 			width: 40,
